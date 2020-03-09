@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS `Permission`
     `ID` INT NOT NULL AUTO_INCREMENT,
     `Name` VARCHAR(25) NOT NULL,
     `KeyPermission` TEXT NOT NULL,
-    `Lang` VARCHAR(4) NOT NULL,
     PRIMARY KEY(`ID`)
 )ENGINE = InnoDB;
 
@@ -159,7 +158,6 @@ CREATE TABLE IF NOT EXISTS `password`
     `Password` VARCHAR(100) NOT NULL,
     `CratedAt` DATETIME NOT NULL,		#DATA WHEN PASWWORD WAS CREATED
     `ChangedAt` DATETIME NOT NULL,		#DATA WHEN PASSWORD WAS UPDATED
-    `CounterSet` SMALLINT NOT NULL,		#COUNTER FOR LAST SET PASSWORD
     `Active` SMALLINT NOT NULL,         #Actived account
     PRIMARY KEY(`ID`)
 )ENGINE=InnoDB;
@@ -194,7 +192,9 @@ CREATE TABLE IF NOT EXISTS `logs`
     `IPAddress` VARCHAR(28),
     `CreatedAt` DATETIME NOT NULL,
     `Action` VARCHAR(255),
-    `Devices` VARCHAR(255),     #WEBSITE APP 
+    `Devices` VARCHAR(255),     #WEBSITE APP
+    `WebAddress` VARCHAR(200),
+    `Request` VARCHAR(50),
     PRIMARY KEY(`ID`)
 )ENGINE = InnoDB;
 
@@ -215,6 +215,7 @@ CREATE TABLE IF NOT EXISTS `agreements_configuration`
     `DateEnd` DATE NOT NULL,
     `CreatedBy` INT NOT NULL,   #RELATION WITH users
     `CreateAt` DATETIME NOT NULL,
+    `UpdatedBy` INT,            #RELATION WITH users
     `UpdatedAt` DATETIME,
     PRIMARY KEY(`ID`)
 )ENGINE = InnoDB;
@@ -230,6 +231,30 @@ CREATE TABLE IF NOT EXISTS `agreements`
     `AccessGuid` VARCHAR(100),
     `Password` VARCHAR(100),
     `PasswordValidity` DATETIME NOT NULL,   #TIME LIVE PASSWORD - 24H
+    `AcceptAgreement` INT(1) NOT NULL,
+    `DataAccept` DATETIME,
+    `IPAddress` VARCHAR(28),
+    `Port` VARCHAR(10),
+    `Device` VARCHAR(255),
+    `HashToAgrremnetForUser` VARCHAR(255),
+    PRIMARY KEY(`ID`)
+)ENGINE = InnoDB;
 
+
+-- ---------------------------------------------
+-- TABLES SENDED EMAILS
+-- ----------------------------------------------
+CREATE TABLE IF NOT EXISTS `sended_email`
+(
+    `ID` INT NOT NULL AUTO_INCREMENT,
+    `From` VARCHAR(100) NOT NULL,
+    `To` VARCHAR(100) NOT NULL,
+    `Subject` VARCHAR(255),
+    `Body` TEXT,
+    `Attachment` VARCHAR(100),
+    `Signature` TEXT,
+    `DateSend` DATETIME,
+    `IdAgreement` INT,
+    `IdUser` INT,
     PRIMARY KEY(`ID`)
 )ENGINE = InnoDB;
