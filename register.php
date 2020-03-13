@@ -2,30 +2,32 @@
 require_once 'core/init.php';
 
 if(Input::exists()) {
-    $valitation = new Validation();
-    $valitation->check($_POST, array(
-        'username' => array(
-            'required' => true,
-            'min' => 2,
-            'max' => 10,
-            'matches' => 'name',
-        ),
-        'password' => array(
-            'required' => true
-        ),
-        'password_again' => array(
-            'required' => true
-        ),
-        'name' => array(
-            'required' => true
-        )
-    ));
+    if(Token::check(Input::get('token'))) {
+        $valitation = new Validation();
+        $valitation->check($_POST, array(
+            'username' => array(
+                'required' => true,
+                'min' => 2,
+                'max' => 10,
+                'matches' => 'name',
+            ),
+            'password' => array(
+                'required' => true
+            ),
+            'password_again' => array(
+                'required' => true
+            ),
+            'name' => array(
+                'required' => true
+            )
+        ));
 
-    if($valitation->passed()) {
-        echo 'Passed!';
-    } else {
-        foreach($valitation->errors() as $error) {
-            echo $error .'<br/>';
+        if ($valitation->passed()) {
+            echo 'Passed!';
+        } else {
+            foreach ($valitation->errors() as $error) {
+                echo $error . '<br/>';
+            }
         }
     }
 }
@@ -49,6 +51,8 @@ if(Input::exists()) {
         <label for="name">Username</label>
         <input type="text" name="name" id="name" value="<?php echo escape(Input::get('name')); ?>">
     </div>
+
+    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 
     <input type="submit" value="Register">
 </form>
