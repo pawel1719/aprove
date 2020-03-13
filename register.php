@@ -1,6 +1,8 @@
 <?php
 require_once 'core/init.php';
 
+echo Session::flash('registed');
+
 if(Input::exists()) {
     if(Token::check(Input::get('token'))) {
         $valitation = new Validation();
@@ -9,7 +11,6 @@ if(Input::exists()) {
                 'required' => true,
                 'min' => 2,
                 'max' => 10,
-                'matches' => 'name',
             ),
             'password' => array(
                 'required' => true
@@ -23,7 +24,24 @@ if(Input::exists()) {
         ));
 
         if ($valitation->passed()) {
-            echo 'Passed!';
+            $user = new User();
+            try {
+
+                $salt = Hash::slat();
+                $user->create(array(
+                    'Email' => Input::get('username') . '@wp.pl',
+                    'Password' => Hash::make(Input::get('password'), $salt),
+                    'Salt' => $salt,
+                    'Permission' => '{"user": 1}',
+                    'CreatedAt' => date('Y-m-d H:i:s'),
+                    'UpdatedAt' => date('Y-m-d H:i:s'),
+                    'IsBlocked' => 0
+                ));
+                Session::flash('registed', 'You are registed!');
+
+            } catch(Exception $e) {
+                die($e->getMessage());
+            }
         } else {
             foreach ($valitation->errors() as $error) {
                 echo $error . '<br/>';
