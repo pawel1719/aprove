@@ -1,7 +1,6 @@
 <?php
 require_once 'core/init.php';
 
-echo Session::flash('registed');
 
 if(Input::exists()) {
     if(Token::check(Input::get('token'))) {
@@ -37,7 +36,9 @@ if(Input::exists()) {
                     'UpdatedAt' => date('Y-m-d H:i:s'),
                     'IsBlocked' => 0
                 ));
+
                 Session::flash('registed', 'You are registed!');
+                Redirect::to('index.php');
 
             } catch(Exception $e) {
                 die($e->getMessage());
@@ -51,6 +52,8 @@ if(Input::exists()) {
 }
 
 ?>
+<a href="index.php">Home</a>
+<hr />
 
 <form action="" method="post">
     <div class="field">
