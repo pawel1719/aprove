@@ -12,11 +12,12 @@ CREATE TABLE IF NOT EXISTS `users`
     `Password` VARCHAR(100) NOT NULL,
     `Salt` VARCHAR(150) NOT NULL,
     `Permission` TEXT NOT NULL,					#PERMISION FOR USERS IN JSON
+    `LastLoginAt` DATETIME NULL,
     `CreatedAt` DATETIME NOT NULL,				#CREATED AT DATATIME
     `UpdatedAt` DATETIME,						#UPDATED AT DATATIME
     `IsBlocked` SMALLINT NOT NULL DEFAULT 0,	#BLOCKED ACCOUNT FROM GIVEN WRONG PASSWORD
     `BlockedAt` DATETIME NULL,					#TIME BLOCKED ACCOUNT
-    `InvalidPassCount` INT NOT NULL DEFAULT 0,	#INVALID PASSWORD COUNTER - count attempts enter wrong password
+    `InvalidAttemptCounter` INT NOT NULL DEFAULT 0,	#INVALID PASSWORD COUNTER - count attempts enter wrong password
     `CounterCorrectLogin` INT NOT NULL,			#COUNTER SUCCESS LOGIN
     `CounterIncorretLogin` INT NOT NULL,  		#COUNTER BAD LOGIN
     `IdPermission` INT NOT NULL,

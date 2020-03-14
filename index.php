@@ -26,10 +26,14 @@ require_once 'core/init.php';
                $user = new User();
                $login = $user->login(Input::get('email'), Input::get('password'));
 
-               if($login) {
-                   Redirect::to('home.php');
+               if($user->data()->IsBlocked == 1) {
+                   echo 'Account is blocked!';
                } else {
-                   echo '<p>Sorry, login is faild!</p>';
+                   if ($login) {
+                       Redirect::to('home.php');
+                   } else {
+                       echo '<p>Sorry, login is faild!</p>';
+                   }
                }
            } else {
                foreach($validate->errors() as $error) {
