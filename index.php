@@ -27,17 +27,23 @@ require_once 'core/init.php';
                $user = new User();
                $login = $user->login(Input::get('email'), Input::get('password'));
 
-               if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts') - 1 &&
-                   $user->data()->BlockedTo < date('Y-m-d H:m:s') ) {
-                   echo '<p>Account is blocked to ' . $user->data()->BlockedTo .'!</p>';
+               $blocked = new DateTime($user->data()->BlockedTo);
+               $now     = new DateTime('now');
+
+               echo var_dump($blocked < $now) . ' ';
+               echo var_dump($user->data()->BlockedTo < date('Y-m-d H:m:s'));
+
+               if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts')-1 &&
+                   $user->data()->BlockedTo < date('Y-m-d H:m:s')) {
+                   echo '<p>Account is blocked ' . $user->data()->BlockedTo .'!</p>';
                } else {
                    if ($login) {
                        Redirect::to('home.php');
                    } else {
-                       if($user->data()->BlockedTo < date('Y-m-d H:m:s')) {
+                       if($user->data()->IsBlocked == 0 || $blocked < $now) {
                            echo '<p>Sorry, login is faild!</p>';
                        } else {
-                           echo '<p>Account is blocked to ' . $user->data()->BlockedTo .'!</p>';
+                           echo '<p>Account is blocked! ' . $user->data()->BlockedTo .'!</p>';
                        }
                    }
                }
