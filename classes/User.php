@@ -48,7 +48,7 @@ class User {
         $user = $this->find($username);
 
         if($user) {
-            if($this->data()->IsBlocked == 0) {
+            if($this->data()->IsBlocked == 0 || $this->data()->BlockedTo < date('Y-m-d H:i:s')) {
                 if ($this->data()->Password === Hash::make($password, $this->data()->Salt)) {
                     //Correct login attempt
                     $this->_db->update('users', $this->data()->ID, array(
@@ -56,6 +56,7 @@ class User {
                         'UpdatedAt' => date('Y-m-d H:i:s'),
                         'CounterCorrectLogin' => $this->data()->CounterCorrectLogin + 1,
                         'BlockedAt' => null,
+                        'BlockedTo' => null,
                         'InvalidAttemptCounter' => 0,
                         'IsBlocked' => 0
                     ));
@@ -69,11 +70,12 @@ class User {
                         'InvalidAttemptCounter' => $this->data()->InvalidAttemptCounter + 1
                     ));
 
-                    if ($this->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts')) {
+                    if ($this->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts') - 1) {
                         // Blocked account user
                         $this->_db->update('users', $this->data()->ID, array(
                             'IsBlocked' => 1,
-                            'BlockedAt' => date('Y-m-d H:i:s',strtotime(Config::get('user/time_to_blocked_account'),strtotime(date("Y-m-d H:i:s"))))
+                            'BlockedAt' => date('Y-m-d H:i:s'),
+                            'BlockedTo' => date('Y-m-d H:i:s',strtotime(Config::get('user/time_to_blocked_account'),strtotime(date("Y-m-d H:i:s"))))
                         ));
                     }
                 }

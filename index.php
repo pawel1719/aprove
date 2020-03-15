@@ -1,7 +1,8 @@
 <?php
 require_once 'core/init.php';
 
-    echo '<a href="register.php">Register</a><hr />';
+    echo date('Y-m-d H:i:s'). ' ';
+    echo ' <a href="register.php">Register</a><hr />';
 
     if(Session::exists('registed')) {
         echo Session::flash('registed');
@@ -26,7 +27,7 @@ require_once 'core/init.php';
                $user = new User();
                $login = $user->login(Input::get('email'), Input::get('password'));
 
-               if($user->data()->IsBlocked == 1) {
+               if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts') - 1) {
                    echo 'Account is blocked!';
                } else {
                    if ($login) {
