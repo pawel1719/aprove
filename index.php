@@ -1,8 +1,8 @@
 <?php
 require_once 'core/init.php';
 
-    echo date('Y-m-d H:i:s'). ' ';
-    echo ' <a href="register.php">Register</a><hr />';
+    echo '<span style="margin-right: 30px;">' . date('Y-m-d H:i:s'). '</span>';
+    echo '<a href="register.php">Register</a><hr />';
 
     if(Session::exists('registed')) {
         echo Session::flash('registed');
@@ -27,13 +27,18 @@ require_once 'core/init.php';
                $user = new User();
                $login = $user->login(Input::get('email'), Input::get('password'));
 
-               if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts') - 1) {
-                   echo 'Account is blocked!';
+               if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts') - 1 &&
+                   $user->data()->BlockedTo < date('Y-m-d H:m:s') ) {
+                   echo '<p>Account is blocked to ' . $user->data()->BlockedTo .'!</p>';
                } else {
                    if ($login) {
                        Redirect::to('home.php');
                    } else {
-                       echo '<p>Sorry, login is faild!</p>';
+                       if($user->data()->BlockedTo < date('Y-m-d H:m:s')) {
+                           echo '<p>Sorry, login is faild!</p>';
+                       } else {
+                           echo '<p>Account is blocked to ' . $user->data()->BlockedTo .'!</p>';
+                       }
                    }
                }
            } else {
