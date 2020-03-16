@@ -36,6 +36,7 @@ require_once 'core/init.php';
                         'Password' => Hash::make(Input::get('password'), $salt),
                         'Salt' => $salt,
                         'Permission' => '{"user": 1}',
+                        'PasswordCreadtedAt' => date('Y-m-d H:i:s'),
                         'CreatedAt' => date('Y-m-d H:i:s'),
                         'UpdatedAt' => date('Y-m-d H:i:s'),
                         'IsBlocked' => 0

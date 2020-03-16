@@ -44,6 +44,31 @@ class User {
         return false;
     }
 
+    public function update($fields = array(), $id = null) {
+        if(!$id && $this->isLogged()) {
+            $id = $this->data()->ID;
+        }
+
+        if(!$this->_db->update('users', $id, $fields)) {
+            throw new Exception('There was a problem updating!');
+        }
+    }
+
+    public function passwordHistory($password, $created, $updated, $id = null) {
+        if(!$id && $this->isLogged()) {
+            $id = $this->data()->ID;
+        }
+
+        if(!$this->_db->insert('password', array(
+            'IDUsers' => $id,
+            'Password' => Hash::make($password, $created),
+            'CratedAt' => $created,
+            'ChangedAt' => $updated
+        ))) {
+            throw new Exception('There was a problem with saving password!');
+        }
+    }
+
     public function login($username = null, $password = null) {
         $user = $this->find($username);
 
