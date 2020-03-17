@@ -69,6 +69,30 @@ class User {
         }
     }
 
+    public function passwordRepeated($password, $last_set_password = 3, $id = null) {
+        if(!$id && $this->isLogged()) {
+            $id = $this->data()->ID;
+        }
+
+        $passwords = $this->_db->query('SELECT * FROM `password` WHERE IDUsers = ' . $id . ' ORDER BY ChangedAt DESC LIMIT ' . $last_set_password);
+        $counter = ($passwords->count() < $last_set_password-1) ? $passwords->count() : $last_set_password-1;
+
+        if($counter != 0) {
+            //currently changed password
+            if(Hash::make($password, $this->data()->Salt) === $this->data()->Password) {
+                return false;
+            }
+            //last set passwords
+            foreach($passwords->results() as $pass) {
+                if(Hash::make($password, $pass->CratedAt) === $pass->Password) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public function login($username = null, $password = null) {
         $user = $this->find($username);
 

@@ -34,20 +34,26 @@ require_once 'core/init.php';
                 if(Hash::make(Input::get('password_current'), $user->data()->Salt) !== $user->data()->Password) {
                     echo 'Your current password is wrong!';
                 } else {
-                    $salt = Hash::slat();
-                    $user->update(array(
-                        'Password' => Hash::make(Input::get('password_new'), $salt),
-                        'Salt' => $salt,
-                        'PasswordCreadtedAt' => date('Y-m-d H:i:s'),
-                        'UpdatedAt' => date('Y-m-d H:i:s')
-                    ));
-                    $user->passwordHistory(
-                        Input::get('password_current'),
-                        $user->data()->PasswordCreadtedAt,
-                        date('Y-m-d H:i:s')
-                    );
+                    if($user->passwordRepeated(Input::get('password_new'), Config::get('user/can_not_use_last_passwords'))) {
 
-                    echo '<p>Password changed!</p>';
+                        $salt = Hash::slat();
+                        $user->update(array(
+                            'Password' => Hash::make(Input::get('password_new'), $salt),
+                            'Salt' => $salt,
+                            'PasswordCreadtedAt' => date('Y-m-d H:i:s'),
+                            'UpdatedAt' => date('Y-m-d H:i:s')
+                        ));
+                        $user->passwordHistory(
+                            Input::get('password_current'),
+                            $user->data()->PasswordCreadtedAt,
+                            date('Y-m-d H:i:s')
+                        );
+
+                        echo '<p>Password changed!</p>';
+
+                    } else {
+                        echo 'Password must be diffrent than last three passwords!';
+                    }
                 }
 
             } else {

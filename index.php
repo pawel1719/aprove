@@ -30,9 +30,6 @@ require_once 'core/init.php';
                $blocked = new DateTime($user->data()->BlockedTo);
                $now     = new DateTime('now');
 
-               echo var_dump($blocked < $now) . ' ';
-               echo var_dump($user->data()->BlockedTo < date('Y-m-d H:m:s'));
-
                if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts')-1 &&
                    $user->data()->BlockedTo < date('Y-m-d H:m:s')) {
                    echo '<p>Account is blocked ' . $user->data()->BlockedTo .'!</p>';
