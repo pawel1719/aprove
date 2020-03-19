@@ -1,18 +1,27 @@
 <?php
 require_once 'core/init.php';
 
-    echo '<span style="margin-right: 30px;">' . date('Y-m-d H:i:s'). '</span>';
-    echo '<a href="register.php">Register</a><hr />';
-
-    if(Session::exists('registed')) {
-        echo Session::flash('registed');
-    }
-
     $logged = new User();
     if($logged->isLogged()) {
         $logged = null;
         Redirect::to('home.php');
     }
+
+?>
+<!DOCTYPE html>
+<HTML>
+    <HEAD>
+        <!-- PLACE ON HEADER -->
+        <?php include_once Config::get('includes/main_index'); ?>
+    </HEAD>
+    <BODY>
+<?php
+
+    if(Session::exists('registed')) {
+        echo Session::flash('registed');
+    }
+
+    echo '<a href="register.php">Register</a><hr />';
 
     if(Input::exists()) {
        if(Token::check(Input::get('token'))) {
@@ -45,6 +54,7 @@ require_once 'core/init.php';
                    }
                }
            } else {
+               // ERRORS FROM VALIDATION
                foreach($validate->errors() as $error) {
                    echo $error . '<br/>';
                }
@@ -54,17 +64,19 @@ require_once 'core/init.php';
 
 ?>
 
+    <form action="" method="post">
+        <div class="filed">
+            <label for="email">Username</label>
+            <input type="text" name="email" id="email">
+        </div>
+        <div class="filed">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+        </div>
 
-<form action="" method="post">
-    <div class="filed">
-        <label for="email">Username</label>
-        <input type="text" name="email" id="email">
-    </div>
-    <div class="filed">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-    </div>
+        <input type="hidden" name="token" id="'token" value="<?php echo Token::generate(); ?>">
+        <input type="submit" value="Log in">
+    </form>
 
-    <input type="hidden" name="token" id="'token" value="<?php echo Token::generate(); ?>">
-    <input type="submit" value="Log in">
-</form>
+</BODY>
+</HTML>
