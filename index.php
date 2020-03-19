@@ -10,18 +10,26 @@ require_once 'core/init.php';
 ?>
 <!DOCTYPE html>
 <HTML>
-    <HEAD>
-        <!-- PLACE ON HEADER -->
-        <?php include_once Config::get('includes/main_index'); ?>
-    </HEAD>
-    <BODY>
+<HEAD>
+
+    <!-- PLACE ON HEADER -->
+    <?php include_once Config::get('includes/main_index'); ?>
+
+</HEAD>
+<BODY class="bg-secondary">
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-1 col-md-3 col-lg-4"></div>
+            <div class="col-10 col-md-6 col-lg-4">
+
 <?php
 
     if(Session::exists('registed')) {
         echo Session::flash('registed');
     }
 
-    echo '<a href="register.php">Register</a><hr />';
+//    echo '<a href="register.php">Register</a><hr />';
 
     if(Input::exists()) {
        if(Token::check(Input::get('token'))) {
@@ -41,42 +49,54 @@ require_once 'core/init.php';
 
                if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts')-1 &&
                    $user->data()->BlockedTo < date('Y-m-d H:m:s')) {
-                   echo '<p>Account is blocked ' . $user->data()->BlockedTo .'!</p>';
+                   echo '<div class="alert alert-danger" role="alert">Account is blocked !</div>';
                } else {
                    if ($login) {
                        Redirect::to('home.php');
                    } else {
                        if($user->data()->IsBlocked == 0 || $blocked < $now) {
-                           echo '<p>Sorry, login is faild!</p>';
+                           echo '<div class="alert alert-danger" role="alert">Sorry, login is faild!</div>';
                        } else {
-                           echo '<p>Account is blocked! ' . $user->data()->BlockedTo .'!</p>';
+                           echo '<div class="alert alert-danger" role="alert">Account is blocked! !</div>';
                        }
                    }
                }
            } else {
                // ERRORS FROM VALIDATION
+               echo '<div class="alert alert-danger" role="alert">';
+
                foreach($validate->errors() as $error) {
-                   echo $error . '<br/>';
+                   echo '<p>' . $error . '</p>';
                }
+
+               echo '</div>';
            }
+
        }
     }
 
 ?>
 
-    <form action="" method="post">
-        <div class="filed">
-            <label for="email">Username</label>
-            <input type="text" name="email" id="email">
-        </div>
-        <div class="filed">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password">
-        </div>
+                <form action="" method="post" class="text-light mt-5">
 
-        <input type="hidden" name="token" id="'token" value="<?php echo Token::generate(); ?>">
-        <input type="submit" value="Log in">
-    </form>
+                    <div class="form-group">
+                        <label for="email">Username</label>
+                        <input type="text" name="email" id="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" class="form-control">
+                    </div>
+
+                    <input type="hidden" name="token" id="'token" value="<?php echo Token::generate(); ?>">
+                    <input type="submit" value="Log in" class="btn btn-primary float-right">
+
+                </form>
+
+            </div>
+            <div class="col-1 col-md-3 col-lg-4"></div>
+        </div>
+    </div>
 
 </BODY>
 </HTML>

@@ -7,7 +7,38 @@ require_once 'core/init.php';
         Redirect::to('index.php');
     }
 
-    echo '<a href="changepassword.php" style="margin-right: 20px;">Change password</a>';
-    echo '<a href="logout.php">Log out</a> <hr/>';
+?>
 
-    echo 'Hello! ' . $user->data()->Email;
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+
+    <!-- PLACE ON HEADER -->
+    <?php include_once Config::get('includes/main_index'); ?>
+
+</HEAD>
+<BODY class="bg-secondary">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-1 col-md-3 col-lg-4"></div>
+            <div class="col-10 col-md-6 col-lg-4">
+
+                <button type="button" class="btn btn-light">
+                    <a href="changepassword.php" style="margin-right: 20px;">Change password</a>
+                </button>
+                <button type="button" class="btn btn-light">
+                    <a href="logout.php">Log out</a>
+                </button>
+
+                <hr/>
+
+                Hello <?php  echo $user->data()->Email; ?>!
+
+            </div>
+            <div class="col-1 col-md-3 col-lg-4"></div>
+        </div>
+    </div>
+
+</BODY>
+</HTML>
