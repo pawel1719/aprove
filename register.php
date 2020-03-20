@@ -8,9 +8,33 @@ require_once 'core/init.php';
         Redirect::to('home.php');
     }
 
+?>
+
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+
+    <?php include_once Config::get('includes/main_index'); ?>
+
+</HEAD>
+<BODY class="bg-secondary">
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-1 col-md-3 col-lg-4"></div>
+        <div class="col-10 col-md-6 col-lg-4">
+
+            <button type="button" class="btn btn-light">
+                <a href="index.php">Home</a>
+            </button>
+
+            <hr />
+
+<?php
 
     if(Input::exists()) {
         if(Token::check(Input::get('token'))) {
+
             $valitation = new Validation();
             $valitation->check($_POST, array(
                 'email' => array(
@@ -49,33 +73,46 @@ require_once 'core/init.php';
                     die($e->getMessage());
                 }
             } else {
+                // ERRORS FROM VALIDATION
+                echo '<div class="alert alert-danger" role="alert">';
+
                 foreach ($valitation->errors() as $error) {
-                    echo $error . '<br/>';
+                    echo '<p>' . $error . '</p>';
                 }
+
+                echo '</div>';
             }
+
         }
     }
+
 ?>
 
 
-<a href="index.php">Home</a>
-<hr />
+            <form action="" method="post" class="text-light mt-5">
 
-<form action="" method="post">
-    <div class="field">
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" value="<?php echo escape(Input::get('email')); ?>" autocomplete="on">
-    </div>
-    <div class="field">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-    </div>
-    <div class="field">
-        <label for="password_again">Password again</label>
-        <input type="password" name="password_again" id="password_again">
-    </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" value="<?php echo escape(Input::get('email')); ?>" autocomplete="on" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password_again">Password again</label>
+                    <input type="password" name="password_again" id="password_again" class="form-control">
+                </div>
 
-    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+                <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+                <input type="submit" value="Register" class="btn btn-primary float-right">
 
-    <input type="submit" value="Register">
-</form>
+            </form>
+
+        </div>
+        <div class="col-1 col-md-3 col-lg-4"></div>
+    </div>
+</div>
+
+</BODY>
+</HTML>

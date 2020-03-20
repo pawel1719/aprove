@@ -53,7 +53,7 @@ class Validation {
     }
 
     public function addError($error) {
-        $this->_errors[] = $error;
+        $this->_errors[] = str_replace('_', ' ',$error);
     }
 
     public function errors() {

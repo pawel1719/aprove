@@ -7,8 +7,30 @@ require_once 'core/init.php';
         Redirect::to('index.php');
     }
 
-    echo '<a href="home.php">Home</a><hr/>';
+?>
 
+
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+
+    <?php include_once Config::get('includes/main_index'); ?>
+
+</HEAD>
+<BODY class="bg-secondary">
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-1 col-md-3 col-lg-4"></div>
+        <div class="col-10 col-md-6 col-lg-4">
+
+            <button type="button" class="btn btn-warning">
+                <a href="home.php">Home</a>
+            </button>
+
+            <hr/>
+
+<?php
 
     if(Input::exists()) {
         if(Token::check(Input::get('token'))) {
@@ -32,7 +54,7 @@ require_once 'core/init.php';
             if($validate->passed()) {
 
                 if(Hash::make(Input::get('password_current'), $user->data()->Salt) !== $user->data()->Password) {
-                    echo 'Your current password is wrong!';
+                    echo '<div class="alert alert-danger" role="alert">Your current password is wrong!</div>';
                 } else {
                     if($user->passwordRepeated(Input::get('password_new'), Config::get('user/can_not_use_last_passwords'))) {
 
@@ -49,18 +71,22 @@ require_once 'core/init.php';
                             date('Y-m-d H:i:s')
                         );
 
-                        echo '<p>Password changed!</p>';
+                        echo '<div class="alert alert-success" role="alert">Password changed!</div>';
 
                     } else {
-                        echo 'Password must be diffrent than last three passwords!';
+                        echo '<div class="alert alert-danger" role="alert">Password must be diffrent than last three passwords!</div>';
                     }
                 }
 
             } else {
+                // ERRORS FROM VALIDATION
+                echo '<div class="alert alert-danger" role="alert">';
+
                 foreach($validate->errors() as $error) {
-                    echo $error . '<br/>';
+                    echo '<p>' . $error . '</p>';
                 }
-                echo '<br/>';
+
+                echo '</div>';
             }
         }
     }
@@ -68,20 +94,30 @@ require_once 'core/init.php';
 ?>
 
 
-<form action="" method="post">
-    <div class="field">
-        <label for="password_current">Current password</label>
-        <input type="password" name="password_current" id="password_current">
-    </div>
-    <div class="field">
-        <label for="password_new">New password</label>
-        <input type="password" name="password_new" id="password_new">
-    </div>
-    <div class="field">
-        <label for="password_new_again">New password again</label>
-        <input type="password" name="password_new_again" id="password_new_again">
-    </div>
+            <form action="" method="post" class="text-light mt-5">
 
-    <input type="hidden" name="token" id="token" value="<?php echo Token::generate(); ?>">
-    <input type="submit" value="Change">
-</form>
+                <div class="form-group">
+                    <label for="password_current">Current password</label>
+                    <input type="password" name="password_current" id="password_current" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password_new">New password</label>
+                    <input type="password" name="password_new" id="password_new" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password_new_again">New password again</label>
+                    <input type="password" name="password_new_again" id="password_new_again" class="form-control">
+                </div>
+
+                <input type="hidden" name="token" id="token" value="<?php echo Token::generate(); ?>">
+                <input type="submit" value="Change" class="btn btn-primary float-right">
+
+            </form>
+
+        </div>
+        <div class="col-1 col-md-3 col-lg-4"></div>
+    </div>
+</div>
+
+</BODY>
+</HTML>

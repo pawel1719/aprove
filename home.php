@@ -13,7 +13,6 @@ require_once 'core/init.php';
 <HTML>
 <HEAD>
 
-    <!-- PLACE ON HEADER -->
     <?php include_once Config::get('includes/main_index'); ?>
 
 </HEAD>
