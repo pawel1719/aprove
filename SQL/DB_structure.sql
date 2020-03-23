@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `users`
     `Email` VARCHAR(60) NOT NULL UNIQUE,        # Email as a login
     `Password` VARCHAR(100) NOT NULL,
     `Salt` VARCHAR(150) NOT NULL,
-    `Permission` TEXT NOT NULL,					#PERMISION FOR USERS IN JSON
+    `Permission` INT(1) NOT NULL DEFAULT 3,		#PERMISION FOR USERS IN JSON
     `PasswordCreadtedAt` DATETIME NULL,
     `LastLoginAt` DATETIME NULL,
     `CreatedAt` DATETIME NOT NULL,				#CREATED AT DATATIME
