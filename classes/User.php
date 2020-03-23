@@ -2,6 +2,7 @@
 class User {
     private $_db,
             $_data,
+            $_dataDetails,
             $_sessionName,
             $_isLoggedIn;
 
@@ -17,7 +18,7 @@ class User {
                 if($this->find($user)) {
                     $this->_isLoggedIn = true;
                 } else {
-
+                    $this->_isLoggedIn = false;
                 }
             }
         } else {
@@ -35,9 +36,11 @@ class User {
         if($user) {
             $field = (is_numeric($user)) ? 'ID' : 'Email';
             $data = $this->_db->get('users', array($field, '=', $user));
+            $data_details = $this->_db->get('users_data', array('IDUsers', '=', $data->firstResult()->ID));
 
             if($data->count()) {
                 $this->_data = $data->firstResult();
+                $this->_dataDetails = $data_details->firstResult();
                 return true;
             }
         }
@@ -51,6 +54,16 @@ class User {
 
         if(!$this->_db->update('users', $id, $fields)) {
             throw new Exception('There was a problem updating!');
+        }
+    }
+
+    public function updateDetails($fields = array(), $id = null) {
+        if(!$id && $this->isLogged()) {
+            $id = $this->dataDetails()->ID;
+        }
+
+        if(!$this->_db->update('users_data', $id, $fields)) {
+            throw new Exception('There was a problem updating details!');
         }
     }
 
@@ -146,8 +159,31 @@ class User {
         return false;
     }
 
+    public function hasPermission($key) {
+        $group = $this->_db->get('Permission', array('ID', '=', $this->data()->Permission));
+
+        if($group->count()) {
+            $permissions = json_decode($group->firstResult()->KeyPermission);
+
+            if($permissions->$key == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function data() {
         return $this->_data;
+    }
+
+    public function dataDetails() {
+        return $this->_dataDetails;
+    }
+
+    public function getUserGroup() {
+        $nameGroup = $this->_db->get('Permission', array('ID', '=', $this->data()->Permission));
+
+        return $nameGroup->firstResult()->Name;
     }
 
     public function isLogged() {
@@ -156,5 +192,9 @@ class User {
 
     public function logout() {
         Session::delete($this->_sessionName);
+    }
+
+    public function exists() {
+        return (!empty($this->_data)) ? true : false;
     }
 }

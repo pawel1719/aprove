@@ -32,7 +32,13 @@ require_once 'core/init.php';
 
                 <hr/>
 
-                Hello <?php  echo $user->data()->Email; ?>!
+                Hello <?php  echo $user->data()->Email; ?>! <br/><br/>
+
+                <?php
+                    echo $user->getUserGroup() . '<br/>';
+                    echo $user->hasPermission('admin');
+
+                ?>
 
             </div>
             <div class="col-1 col-md-3 col-lg-4"></div>

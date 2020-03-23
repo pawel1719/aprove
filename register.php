@@ -59,7 +59,7 @@ require_once 'core/init.php';
                         'Email' => Input::get('email'),
                         'Password' => Hash::make(Input::get('password'), $salt),
                         'Salt' => $salt,
-                        'Permission' => '{"user": 1}',
+                        'Permission' => 3,
                         'PasswordCreadtedAt' => date('Y-m-d H:i:s'),
                         'CreatedAt' => date('Y-m-d H:i:s'),
                         'UpdatedAt' => date('Y-m-d H:i:s'),
