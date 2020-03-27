@@ -35,6 +35,7 @@ class DBB {
             $x = 1;
             if(count($params)) {
                 foreach($params as $param) {
+                    $param = (strlen($param)==0) ? NULL : $param;
                     $this->_query->bindValue($x, $param);
                     $x++;
                 }

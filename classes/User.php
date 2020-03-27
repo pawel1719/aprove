@@ -36,10 +36,10 @@ class User {
         if($user) {
             $field = (is_numeric($user)) ? 'ID' : 'Email';
             $data = $this->_db->get('users', array($field, '=', $user));
-            $data_details = $this->_db->get('users_data', array('IDUsers', '=', $data->firstResult()->ID));
 
             if($data->count()) {
                 $this->_data = $data->firstResult();
+                $data_details = $this->_db->get('users_data', array('IDUsers', '=', $this->_data->ID));
                 $this->_dataDetails = $data_details->firstResult();
                 return true;
             }

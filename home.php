@@ -24,7 +24,10 @@ require_once 'core/init.php';
             <div class="col-10 col-md-6 col-lg-4">
 
                 <button type="button" class="btn btn-light">
-                    <a href="changepassword.php" style="margin-right: 20px;">Change password</a>
+                    <a href="changepassword.php">Change password</a>
+                </button>
+                <button type="button" class="btn btn-light">
+                    <a href="update.php">Update</a>
                 </button>
                 <button type="button" class="btn btn-light">
                     <a href="logout.php">Log out</a>
