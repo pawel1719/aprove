@@ -20,20 +20,11 @@ require_once 'core/init.php';
 
     <div class="container">
         <div class="row">
-            <div class="col-1 col-md-3 col-lg-4"></div>
-            <div class="col-10 col-md-6 col-lg-4">
+            <div class="col-1 col-md-2 col-lg-1 col-xl-1"></div>
+            <div class="col-10 col-md-8 col-lg-10 col-xl-10">
 
-                <button type="button" class="btn btn-light">
-                    <a href="changepassword.php">Change password</a>
-                </button>
-                <button type="button" class="btn btn-light">
-                    <a href="update.php">Update</a>
-                </button>
-                <button type="button" class="btn btn-light">
-                    <a href="logout.php">Log out</a>
-                </button>
-
-                <hr/>
+                <!-- App menu -->
+                <?php include_once Config::get('includes/main_menu'); ?>
 
                 Hello <?php  echo $user->data()->Email; ?>! <br/><br/>
 
@@ -44,7 +35,7 @@ require_once 'core/init.php';
                 ?>
 
             </div>
-            <div class="col-1 col-md-3 col-lg-4"></div>
+            <div class="col-1 col-md-2 col-lg-1 col-xl-1"></div>
         </div>
     </div>
 

@@ -24,11 +24,8 @@ require_once 'core/init.php';
         <div class="col-1 col-md-3 col-lg-4"></div>
         <div class="col-10 col-md-6 col-lg-4">
 
-            <button type="button" class="btn btn-warning">
-                <a href="home.php">Home</a>
-            </button>
-
-            <hr/>
+            <!-- App menu -->
+            <?php include_once Config::get('includes/main_menu'); ?>
 
 <?php
 

@@ -23,4 +23,16 @@ class Input {
 
         return '';
     }
+
+    public static function destroy($names) {
+        $vars = explode(',', $names);
+
+        foreach($vars as $var) {
+            if(isset($_POST[$var])) {
+                unset($_POST[$var]);
+            } else if(isset($_GET[$var])) {
+                unset($_GET[$var]);
+            }
+        }
+    }
 }

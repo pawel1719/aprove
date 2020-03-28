@@ -41,6 +41,9 @@ if(!$user->isLogged()) {
         <div class="col-1 col-md-3 col-lg-1"></div>
         <div class="col-10 col-md-6 col-lg-10">
 
+            <!-- App menu -->
+            <?php include_once Config::get('includes/main_menu'); ?>
+
 <?php
 
 if(Session::exists('update')) {
