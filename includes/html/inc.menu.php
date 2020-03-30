@@ -11,6 +11,9 @@
     <a href="sendmail.php">Mail</a>
 </button>
 <button type="button" class="btn btn-warning">
+    <a href="admin/adminpanel.php">Admin panel</a>
+</button>
+<button type="button" class="btn btn-light">
     <a href="logout.php">Log out</a>
 </button>
 

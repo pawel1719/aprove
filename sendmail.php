@@ -45,8 +45,8 @@ if(!$user->isLogged()) {
                        <HTML>
                        <HEAD></HEAD>
                        <BODY>
-                            <p>' . Input::get('mail_body') . '</p>
-                            <p>Best wishes<br/>>Aproval app!<br/>Created by Paweł Szóstkiewicz</p>
+                            <p>' . nl2br(Input::get('mail_body')) . '</p>
+                            <p>Best wishes<br/>Aproval app!<br/>Created by Paweł Szóstkiewicz</p>
                        </BODY>
                        </HTML>
                        ';
