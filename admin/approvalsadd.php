@@ -44,42 +44,32 @@ if(!$user->isLogged()) {
                             'title' => array(
                                 'required' => true,
                                 'min' => 5,
-                                'max' => 150)
-//                            ),
-//                            'content' => array(
-//                                'required' => true,
-//                                'min' => 12
-//                            ),
-//                            'start' => array(
-//                                'required' => true
-//                            ),
-//                            'end' => array(
-//                                'required' => true
-//                            )
+                                'max' => 150
+                            ),
+                            'content' => array(
+                                'required' => true,
+                                'min' => 12
+                            ),
+                            'start' => array(
+                                'required' => true
+                            ),
+                            'end' => array(
+                                'required' => true
+                            )
                         ));
 
                         if ($validation->passed()) {
 
                             try {
 
-                                $version = 0;
-                                $db = DBB::getInstance();
-                                $title = $db->query('SELECT * FROM agreements_configuration WHERE Title = "' . escape(Input::get('title')) . '" ORDER BY CreateAt DESC');
-
-                                if($title->count()) {
-                                    $version = (int)$title->firstResult()->Version;
-                                }
-
-                                $db->insert('agreements_configuration', array(
-                                    'AgreementGuid' => md5(Input::get('title') . Input::get('title')),
-                                    'Title' => escape(Input::get('title')),
-                                    'Content' => escape(nl2br(Input::get('content'))),
-                                    'Version' => 1 + $version,
-                                    'DateStart' => Input::get('start'),
-                                    'DateEnd' => Input::get('end'),
-                                    'IsActived' => (Input::get('is_active') == 'on') ? 1 : 0,
-                                    'CreatedBy' => $user->data()->ID,
-                                    'CreateAt' => date('Y-m-d H:i:s')
+                                $approval = new Approval();
+                                $approval->addNew(array(
+                                    'Title'         => Input::get('title'),
+                                    'Content'       => Input::get('content'),
+                                    'DateStart'     => Input::get('start'),
+                                    'DateEnd'       => Input::get('end'),
+                                    'IsActived'     => Input::get('is_active'),
+                                    'CreatedBy'     => $user->data()->ID
                                 ));
 
                             } catch(Exception $e) {
