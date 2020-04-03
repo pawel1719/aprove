@@ -24,6 +24,17 @@ class Input {
         return '';
     }
 
+    public static function set($name, $value, $type = 'post') {
+        switch($type) {
+            case 'post':
+                $_POST[$name] = $value;
+            break;
+            case 'get':
+                $_GET[$name] = $value;
+            break;
+        }
+    }
+
     public static function destroy($names) {
         $vars = explode(',', $names);
 

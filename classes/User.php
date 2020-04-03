@@ -180,6 +180,16 @@ class User {
         return $this->_dataDetails;
     }
 
+    public function usersAll() {
+        $users = $this->_db->query('SELECT u.ID, u.Email, u.LastLoginAt, u.IsBlocked, u.BlockedAt, u.BlockedTo, d.FirstName, d.LastName FROM users u LEFT JOIN users_data d ON u.ID=d.IDUsers');
+
+        if(!$users) {
+            throw new Exception('#121 Cant get users information');
+        }
+
+        return $users;
+    }
+
     public function getUserGroup() {
         $nameGroup = $this->_db->get('Permission', array('ID', '=', $this->data()->Permission));
 

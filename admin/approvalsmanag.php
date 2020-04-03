@@ -30,6 +30,14 @@ if(!$user->isLogged()) {
 
             <h2>Welcome in managment approvals!</h2>
             <br>
+            <?php
+
+                // Warning when link doesnt work or dont exist variable - aproval
+                if(Session::exists('approvalmanag')){
+                    echo '<div class="alert alert-warning">'. Session::flash('approvalmanag') .'</div>';
+                }
+
+            ?>
             <br>
 
             <div class="table-responsive">
@@ -53,10 +61,10 @@ if(!$user->isLogged()) {
                         $no = 1;
 
                         foreach($approvals as $approval) {
-                            echo '<tr>';
+                            echo "<tr>\n";
                             echo '<td>'. $no .'</td>';
-                            echo '<td>'. $approval->Title .'</td>';
-                            echo '<td>' . $approval->Version .'.0 </td>';
+                            echo '<td><a href="approvmanag.php?approval='. $approval->AgreementGuid .'">'. $approval->Title .'</a></td>';
+                            echo '<td>'. $approval->Version .'.0</td>';
                             echo '<td>'. ((($approval->IsActived) == 1) ? 'Tak' : 'Nie') .'</td>';
                             echo '<td>'. $approval->DateStart .'</td>';
                             echo '<td>'. $approval->DateEnd .'</td>';

@@ -19,7 +19,7 @@ class Approval {
 
         $fields['AgreementGuid'] = md5($fields['Title'] . $fields['Content']);
         $fields['Version']       = 1 + $version;
-        $fields['Content']       = nl2br($fields['Content']);
+        $fields['Content']       = $fields['Content'];
         $fields['IsActived']     = ($fields['IsActived']== 'on') ? 1 : 0;
         $fields['CreateAt']      = date('Y-m-d H:i:s');
 
@@ -33,4 +33,24 @@ class Approval {
 
         return $this->_data->results();
     }
+
+    public function getApproval($where = array()) {
+        $data = $this->_db->get('agreements_configuration', $where);
+
+        if(!$data) {
+            throw new Exception("#132 Cant find data");
+        }
+
+        return $data->firstResult();
+    }
+
+    public function update($id = null, $fields = array()) {
+        $fields['UpdatedAt'] = date('Y-m-d H:i:s');
+        $fields['IsActived']     = ($fields['IsActived']== 'on') ? 1 : 0;
+
+        if(!$this->_db->update('agreements_configuration', $id, $fields)) {
+            throw new Exception('There was a problem updating!');
+        }
+    }
+
 }
