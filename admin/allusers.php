@@ -32,15 +32,14 @@ if(!$user->isLogged()) {
 
             <div class="table-responsive">
                 <table class="table table-light table-striped table-hover">
-                    <thead class="thead-dark">
+                    <thead class="thead-dark table-sm">
                     <tr>
                         <th scope="col">Nr</th>
                         <th scope="col">Login</th>
                         <th scope="col">Nazwisko</th>
                         <th scope="col">Imię</th>
                         <th scope="col">Ostatnie logowanie</th>
-                        <th scope="col">Zablokowany</th>
-                        <th scope="col">Blokada od</th>
+                        <th scope="col">Blokada</th>
                         <th scope="col">Blokada do</th>
                     </tr>
                     </thead>
@@ -48,28 +47,68 @@ if(!$user->isLogged()) {
 
                     <?php
 
-                        $data = $user->usersAll();
+                        //Set default value if variables are wrong type
+                        if(Input::exists('get')) {
+                            if(!is_numeric(Input::get('page'))) {
+                                Input::set('page', 1, 'get');
+                            }
+                            if(!is_numeric(Input::get('row'))) {
+                                Input::set('row', 15, 'get');
+                            }
+                        }
+
+                        $no_row = ((int)Input::get('page')-1) * Input::get('row');
+
+                        $data = $user->usersAll($no_row, Input::get('row'));
                         $users = $data->results();
-                        $no = 1;
 
                         foreach($users as $u) {
+                            $no_row++;
                             echo "\n<tr>";
-                            echo '<td>'. $no .'</td>';
+                            echo '<td>'. $no_row .'</td>';
                             echo '<td>'. $u->Email  .'</td>';
                             echo '<td>'. $u->LastName  .'</td>';
                             echo '<td>'. $u->FirstName .'</td>';
-                            echo '<td>'. $u->LastLoginAt .'</td>';
-                            echo '<td>'. ((($u->IsBlocked) == 1) ? 'Tak' : 'Nie') .'</td>';
-                            echo '<td>'. $u->BlockedAt .'</td>';
+                            echo '<td class="text-center">'. $u->LastLoginAt .'</td>';
+                            echo '<td class="text-sm-center">'. ((($u->IsBlocked) == 1) ? 'Tak' : 'Nie') .'</td>';
                             echo '<td>'. $u->BlockedTo .'</td>';
                             echo '</tr>';
-                            $no++;
                         }
 
                     ?>
 
                     </tbody>
                 </table>
+
+                <nav>
+                    <ul class="pagination justify-content-center pagination-sm">
+                    <?php
+
+                        $all_row = $user->allNumerAccount()->firstResult();
+                        $all_pages = (int)$all_row->rows/(int)Input::get('row');
+
+                        if($all_pages >= 5) {
+                            // previously page
+                            echo '<li class="page-item'. ((Input::get('page') == 1) ? ' disabled': '' ).'"><a class="page-link" href="allusers.php?row='. Input::get('row').'&page='. ((int)Input::get('page')-1) .'">&lt;&lt;</a></li>';
+
+                            // button with numer of pages
+                            $start = (((Input::get('page') - 2) > 0) ? (Input::get('page') - 2) : 1);
+                            $end = (((Input::get('page') + 2) <= $all_pages) ? (((Input::get('page') + 2) <= 5) ? 5 : (Input::get('page') + 2)) : $all_pages);
+
+                            for($i = $start; $i <= $end; $i++) {
+                                echo '<li class="page-item'. ((Input::get('page')==$i) ? ' active' : '') .'"><a class="page-link" href="allusers.php?row='. Input::get('row') .'&page='. $i .'">'. $i .'</a></li>';
+                            }
+
+                            // next pages
+                            echo '<li class="page-item'. ((Input::get('page') == $all_pages) ? ' disabled': '') .'"><a class="page-link" href="allusers.php?row='. Input::get('row').'&page='. ((int)Input::get('page')+1) .'">&gt;&gt;</a></li>';
+                        } else {
+                            echo 'nie';
+                        }
+
+                    ?>
+                    </ul>
+                </nav>
+
             </div>
         </div>
         <div class="col-1 col-md-2 col-lg-2"></div>

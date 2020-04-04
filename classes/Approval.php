@@ -29,7 +29,16 @@ class Approval {
     }
 
     public function data() {
-        $this->_data = $this->_db->query('SELECT * FROM agreements_configuration ORDER BY CreateAt DESC');
+        $this->_data = $this->_db->query('SELECT 
+            DISTINCT(ac.Title)
+            ,ac2.Version
+            ,ac2.IsActived
+            ,ac2.DateStart
+            ,ac2.DateEnd
+            ,ac2.AgreementGuid
+            ,ac2.CreateAt
+        FROM agreements_configuration ac LEFT JOIN agreements_configuration ac2 ON ac.Title=ac2.Title #AND ac2.ID=(SELECT ID FROM agreements_configuration WHERE Title=ac.Title ORDER BY ID DESC LIMIT 1)
+        ORDER BY ac.Title ASC, ac2.Version DESC');
 
         return $this->_data->results();
     }

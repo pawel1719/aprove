@@ -11,5 +11,5 @@
     <a href="approvalscharts.php">Chart approval</a>
 </button>
 <button type="button" class="btn btn-light  mb-1">
-    <a href="allusers.php">Users</a>
+    <a href="allusers.php?row=15&page=1">Users</a>
 </button>
