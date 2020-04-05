@@ -85,25 +85,23 @@ if(!$user->isLogged()) {
                     <?php
 
                         $all_row = $user->allNumerAccount()->firstResult();
-                        $all_pages = (int)$all_row->rows/(int)Input::get('row');
+                        $all_pages = ceil((int)$all_row->rows/(int)Input::get('row'));
 
-                        if($all_pages >= 5) {
-                            // previously page
-                            echo '<li class="page-item'. ((Input::get('page') == 1) ? ' disabled': '' ).'"><a class="page-link" href="allusers.php?row='. Input::get('row').'&page='. ((int)Input::get('page')-1) .'">&lt;&lt;</a></li>';
 
-                            // button with numer of pages
-                            $start = (((Input::get('page') - 2) > 0) ? (Input::get('page') - 2) : 1);
-                            $end = (((Input::get('page') + 2) <= $all_pages) ? (((Input::get('page') + 2) <= 5) ? 5 : (Input::get('page') + 2)) : $all_pages);
+                        // previously page
+                        echo '<li class="page-item'. ((Input::get('page') == 1) ? ' disabled': '' ).'"><a class="page-link" href="allusers.php?row='. Input::get('row').'&page='. ((int)Input::get('page')-1) .'">&lt;&lt;</a></li>';
 
-                            for($i = $start; $i <= $end; $i++) {
-                                echo '<li class="page-item'. ((Input::get('page')==$i) ? ' active' : '') .'"><a class="page-link" href="allusers.php?row='. Input::get('row') .'&page='. $i .'">'. $i .'</a></li>';
-                            }
+                        // button with numer of pages
+                        $start = (((Input::get('page') - 2) > 0) ? (Input::get('page') - 2) : 1);
+                        $end = (((Input::get('page') + 2) <= $all_pages) ? (((Input::get('page') + 2) <= 5) ? (($all_pages < 5) ? $all_pages : 5) : (Input::get('page') + 2)) : $all_pages);
+//                            echo $start .' '. $end;
 
-                            // next pages
-                            echo '<li class="page-item'. ((Input::get('page') == $all_pages) ? ' disabled': '') .'"><a class="page-link" href="allusers.php?row='. Input::get('row').'&page='. ((int)Input::get('page')+1) .'">&gt;&gt;</a></li>';
-                        } else {
-                            echo 'nie';
+                        for($i = $start; $i <= $end; $i++) {
+                            echo '<li class="page-item'. ((Input::get('page')==$i) ? ' active' : '') .'"><a class="page-link" href="allusers.php?row='. Input::get('row') .'&page='. $i .'">'. $i .'</a></li>';
                         }
+
+                        // next pages
+                        echo '<li class="page-item'. ((Input::get('page') == $all_pages) ? ' disabled': '') .'"><a class="page-link" href="allusers.php?row='. Input::get('row').'&page='. ((int)Input::get('page')+1) .'">&gt;&gt;</a></li>';
 
                     ?>
                     </ul>
