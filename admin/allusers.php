@@ -30,6 +30,14 @@ if(!$user->isLogged()) {
 
             <h2>Welcome in All users!</h2>
 
+            <?php
+
+                if(Session::exists('user_managment')) {
+                    echo '<div class="alert alert-warning">'. Session::flash('user_managment') .'</div>';
+                }
+
+            ?>
+
             <div class="table-responsive">
                 <table class="table table-light table-striped table-hover">
                     <thead class="thead-dark table-sm">
@@ -49,10 +57,10 @@ if(!$user->isLogged()) {
 
                         //Set default value if variables are wrong type
                         if(Input::exists('get')) {
-                            if(!is_numeric(Input::get('page'))) {
+                            if(!is_numeric(Input::get('page')) || Input::get('page') <= 0) {
                                 Input::set('page', 1, 'get');
                             }
-                            if(!is_numeric(Input::get('row'))) {
+                            if(!is_numeric(Input::get('row')) || Input::get('row') <= 0) {
                                 Input::set('row', 15, 'get');
                             }
                         }
@@ -66,8 +74,8 @@ if(!$user->isLogged()) {
                             $no_row++;
                             echo "\n<tr>";
                             echo '<td>'. $no_row .'</td>';
-                            echo '<td>'. $u->Email  .'</td>';
-                            echo '<td>'. $u->LastName  .'</td>';
+                            echo '<td><a href="user.php?id='. $u->IDHash .'">'. $u->Email  .'</a></td>';
+                            echo '<td>' . $u->LastName  . '</td>';
                             echo '<td>'. $u->FirstName .'</td>';
                             echo '<td class="text-center">'. $u->LastLoginAt .'</td>';
                             echo '<td class="text-sm-center">'. ((($u->IsBlocked) == 1) ? 'Tak' : 'Nie') .'</td>';
@@ -92,9 +100,26 @@ if(!$user->isLogged()) {
                         echo '<li class="page-item'. ((Input::get('page') == 1) ? ' disabled': '' ).'"><a class="page-link" href="allusers.php?row='. Input::get('row').'&page='. ((int)Input::get('page')-1) .'">&lt;&lt;</a></li>';
 
                         // button with numer of pages
-                        $start = (((Input::get('page') - 2) > 0) ? (Input::get('page') - 2) : 1);
+                        // $start = (((Input::get('page') - 2) > 0) ? (Input::get('page') - 2) : 1);
+
+                        if((Input::get('page') - 2) > 0) {
+                            if(Input::get('page') == $all_pages) {
+                                $start = Input::get('page') - 4;
+                            } else if(Input::get('page') == ($all_pages-1)) {
+                                $start = Input::get('page') - 3;
+                            } else if($all_pages <= 5 && Input::get('page') == ($all_pages-2)) {
+                                $start = Input::get('page') - 2;
+                            } else {
+                                $start = Input::get('page') - 2;
+                            }
+                            if($start <= 0) {
+                                $start = 1;
+                            }
+                        } else {
+                            $start = 1;
+                        }
                         $end = (((Input::get('page') + 2) <= $all_pages) ? (((Input::get('page') + 2) <= 5) ? (($all_pages < 5) ? $all_pages : 5) : (Input::get('page') + 2)) : $all_pages);
-//                            echo $start .' '. $end;
+
 
                         for($i = $start; $i <= $end; $i++) {
                             echo '<li class="page-item'. ((Input::get('page')==$i) ? ' active' : '') .'"><a class="page-link" href="allusers.php?row='. Input::get('row') .'&page='. $i .'">'. $i .'</a></li>';

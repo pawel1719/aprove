@@ -34,7 +34,7 @@ class User {
 
     public function find($user = null) {
         if($user) {
-            $field = (is_numeric($user)) ? 'ID' : 'Email';
+            $field = (is_numeric($user)) ? 'ID' : (strpos($user, '@') ? 'Email' : 'IDHash');
             $data = $this->_db->get('users', array($field, '=', $user));
 
             if($data->count()) {
@@ -182,7 +182,7 @@ class User {
 
     public function usersAll($offset = 10, $row_count = 15) {
         $users = $this->_db->query('SELECT 
-            u.ID, u.Email, u.LastLoginAt, 
+            u.ID, u.IDHash, u.Email, u.LastLoginAt, 
             u.IsBlocked, u.BlockedAt, u.BlockedTo, 
             d.FirstName, d.LastName 
         FROM users u LEFT JOIN users_data d ON u.ID=d.IDUsers
