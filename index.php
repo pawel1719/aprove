@@ -4,6 +4,7 @@ require_once 'core/init.php';
     $logged = new User();
     if($logged->isLogged()) {
         $logged = null;
+        Logs::addError("Unauthorization access!");
         Redirect::to('home.php');
     }
 
@@ -23,6 +24,8 @@ require_once 'core/init.php';
             <div class="col-10 col-md-6 col-lg-4">
 
 <?php
+
+    Logs::addInformation('Visited page!');
 
     if(Session::exists('registed')) {
         echo Session::flash('registed');

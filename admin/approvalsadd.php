@@ -4,6 +4,7 @@ require_once '../core/init.php';
 $user = new User();
 
 if(!$user->isLogged()) {
+    Logs::addError("Unauthorization access!");
     Redirect::to('../index.php');
 }
 
@@ -121,7 +122,7 @@ if(!$user->isLogged()) {
                 </div>
 
                 <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-                <input type="submit" value="Dodaj zgodę" class="btn btn-primary float-right">
+                <input type="submit" value="Utwórz zgodę" class="btn btn-primary float-right">
 
             </form>
 

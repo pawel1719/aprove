@@ -4,6 +4,7 @@ require_once '../core/init.php';
 $user = new User();
 
 if(!$user->isLogged()) {
+    Logs::addError("Unauthorization access!");
     Redirect::to('../index.php');
 }
 
@@ -50,6 +51,8 @@ if(!$user->isLogged()) {
                         <th scope="col">Aktywna</th>
                         <th scope="col">Początek</th>
                         <th scope="col">Koniec</th>
+                        <th scope="col">Członkowie</th>
+                        <th scope="col">Zgoda</th>
                     </tr>
                     </thead>
                     <tbody class="table-sm">
@@ -62,12 +65,14 @@ if(!$user->isLogged()) {
 
                         foreach($approvals as $approval) {
                             echo "<tr>\n";
-                            echo '<td>'. $no .'</td>';
-                            echo '<td><a href="approvmanag.php?approval='. $approval->AgreementGuid .'">'. $approval->Title .'</a></td>';
-                            echo '<td>'. $approval->Version .'.0</td>';
-                            echo '<td>'. ((($approval->IsActived) == 1) ? 'Tak' : 'Nie') .'</td>';
-                            echo '<td>'. $approval->DateStart .'</td>';
-                            echo '<td>'. $approval->DateEnd .'</td>';
+                            echo '<td class="small">'. $no .'</td>';
+                            echo '<td class="small">'. $approval->Title .'</td>';
+                            echo '<td class="small">'. $approval->Version .'.0</td>';
+                            echo '<td class="small">'. ((($approval->IsActived) == 1) ? 'Tak' : 'Nie') .'</td>';
+                            echo '<td class="small">'. $approval->DateStart .'</td>';
+                            echo '<td class="small">'. $approval->DateEnd .'</td>';
+                            echo '<td class="text-center small"><a href="approvusers.php?id='. $approval->AgreementGuid .'">Zarządzaj</a></td>';
+                            echo '<td class="text-center small"><a href="approvmanag.php?approval='. $approval->AgreementGuid .'">Edytuj</a></td>';
                             echo '</tr>';
                             $no++;
                         }

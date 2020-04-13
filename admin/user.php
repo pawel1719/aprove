@@ -4,11 +4,13 @@ require_once '../core/init.php';
 $user = new User();
 
 if(!$user->isLogged()) {
+    Logs::addError("Unauthorization access!");
     Redirect::to('../index.php');
 }
 
 if(!Input::get('id')) {
     Session::flash('user_managment', 'Something went wrong!');
+    Logs::addError("Incorrect address! Wrong ID.");
     Redirect::to('allusers.php');
 }
 

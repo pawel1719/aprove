@@ -4,7 +4,7 @@ require_once 'core/init.php';
     $logged = new User();
 
     if($logged->isLogged()) {
-        $logged = null;
+        Logs::addError("Unauthorization access!");
         Redirect::to('home.php');
     }
 

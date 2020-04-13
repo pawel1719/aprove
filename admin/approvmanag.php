@@ -4,11 +4,13 @@
     $user = new User();
 
     if(!$user->isLogged()) {
+        Logs::addError("Unauthorization access!");
         Redirect::to('../index.php');
     }
 
     if(!Input::get('approval')) {
         Session::flash('approvalmanag', 'Something went wrong!');
+        Logs::addError("Incorrect address! Wrong approval");
         Redirect::to('approvalsmanag.php');
     }
 
@@ -17,6 +19,7 @@
 
     if(!$approval) {
         Session::flash('approvalmanag', 'Something went wrong!');
+        Logs::addError("Incorrect address! Approval dont exist.");
         Redirect::to('approvalsmanag.php');
     }
 
@@ -144,7 +147,7 @@
                     <input type="date" name="end" id="end" value="<?php echo escape(Input::get('end')); ?>" autocomplete="on" class="form-control">
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" name="is_active" id="is_active" class="form-check-input" <?php echo (($approval->IsActived) == 1) ? 'checked' : '';?>
+                    <input type="checkbox" name="is_active" id="is_active" class="form-check-input" <?php echo (($approval->IsActived) == 1) ? 'checked' : ''; ?>>
                     <label for="is_active" class="form-check-label">Is active</label>
                 </div>
 

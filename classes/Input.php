@@ -19,6 +19,8 @@ class Input {
             return $_POST[$item];
         } else if(isset($_GET[$item])) {
             return $_GET[$item];
+        } else if(isset($_SERVER[$item])) {
+            return $_SERVER[$item];
         }
 
         return '';
