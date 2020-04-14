@@ -7,7 +7,8 @@ class Logs {
         }
         $handle = fopen($file_name, "a+");
 
-        $date       = date('Y-m-d H:i:s');
+        $date       = date('Y-m-d H:i:s P');
+        $from       = Input::get('HTTP_REFERER');
         $file       = Input::get('REQUEST_URI');
         $req        = Input::get('REQUEST_METHOD');
         $protocol   = Input::get('SERVER_PROTOCOL');
@@ -15,7 +16,7 @@ class Logs {
         $port       = Input::get('REMOTE_PORT');
         $user_agent = Input::get('HTTP_USER_AGENT');
 
-        fputs($handle, "[{$date}] - {$client}:{$port} - {$req} {$protocol} {$file} - ". $line ." - {$user_agent}\n");
+        fputs($handle, "[{$date}] - {$client}:{$port} - {$req} {$protocol} {$from} >> {$file} --- ". $line ." --- {$user_agent}\n");
 
         fclose($handle);
     }

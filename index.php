@@ -64,6 +64,9 @@ require_once 'core/init.php';
                    }
                }
            } else {
+               // Save information to file with logs
+               Logs::addWarning('Invalid attempt login! User: '. Input::get('email') .'. ');
+
                // ERRORS FROM VALIDATION
                echo '<div class="alert alert-danger" role="alert">';
 
