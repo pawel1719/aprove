@@ -68,7 +68,8 @@ if(!$user->isLogged()) {
 
                         $no_row = ((int)Input::get('page')-1) * Input::get('row');
 
-                        $data = $user->usersAll($no_row, Input::get('row'));
+                        $users_ob = new Users();
+                        $data = $users_ob->usersAll($no_row, Input::get('row'));
                         $users = $data->results();
 
                         foreach($users as $u) {
@@ -93,7 +94,7 @@ if(!$user->isLogged()) {
                     <ul class="pagination justify-content-center pagination-sm">
                     <?php
 
-                        $all_row = $user->allNumerAccount()->firstResult();
+                        $all_row = $users_ob->allNumberAccount()->firstResult();
                         $all_pages = ceil((int)$all_row->rows/(int)Input::get('row'));
 
 

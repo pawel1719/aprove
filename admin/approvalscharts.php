@@ -34,11 +34,12 @@ if(!$user->isLogged()) {
 
                 var options = {
                     title: titlee,
-                    is3D: false,
+                    is3D: true,
                     pieStartAngle: 100,
                     colors: ['#f7453f', '#3ece42', '#4d5360'],
-                    backgroundColor: '#808891'
-                };
+                    backgroundColor: '#808891',
+                    legend: {position: 'bottom'},
+            };
 
                 var chart = new google.visualization.PieChart(document.getElementById(id));
 
@@ -80,8 +81,8 @@ if(!$user->isLogged()) {
 
                 //js listeren
                 $js = "window.addEventListener('load', (event) => {\n";
-                $js .= "\t\t\twykres('chart_{$agreement->IDagreementsConfiguration}', '{$agreement->Title} - wersja 0.{$agreement->Version}', {$no}, {$yes}, {$null});\n";
-                $js .= "\t\t});";
+                $js .= "\twykres('chart_{$agreement->IDagreementsConfiguration}', '{$agreement->Title} - wersja 0.{$agreement->Version}', {$no}, {$yes}, {$null});\n";
+                $js .= "});\n";
                 // div in html on charts
                 $div_html .= '<div id="chart_'. (int)$agreement->IDagreementsConfiguration .'" style="width: 100%; height: 350px; margin-bottom: 10px;"></div>' . "\n";
 

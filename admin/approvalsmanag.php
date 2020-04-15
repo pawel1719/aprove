@@ -71,7 +71,7 @@ if(!$user->isLogged()) {
                             echo '<td class="small">'. ((($approval->IsActived) == 1) ? 'Tak' : 'Nie') .'</td>';
                             echo '<td class="small">'. $approval->DateStart .'</td>';
                             echo '<td class="small">'. $approval->DateEnd .'</td>';
-                            echo '<td class="text-center small"><a href="approvusers.php?id='. $approval->AgreementGuid .'">Zarządzaj</a></td>';
+                            echo '<td class="text-center small"><a href="approvusers.php?id='. $approval->AgreementGuid .'&page=1">Zarządzaj</a></td>';
                             echo '<td class="text-center small"><a href="approvmanag.php?approval='. $approval->AgreementGuid .'">Edytuj</a></td>';
                             echo '</tr>';
                             $no++;
