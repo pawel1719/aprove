@@ -1,46 +1,41 @@
 <?php
 require_once '../core/init.php';
 
-$user = new User();
+    $user = new User();
 
-if(!$user->isLogged()) {
-    Logs::addError("Unauthorization access!");
-    Redirect::to('../index.php');
-}
+    if(!$user->isLogged()) {
+        Logs::addError("Unauthorization access!");
+        Redirect::to('../index.php');
+    }
 
-if(!Input::get('id')) {
-    Session::flash('approvalmanag', 'Something went wrong!');
-    Logs::addError("Incorrect address! Wrong ID.");
-    Redirect::to('approvalsmanag.php');
-}
+    if(!Input::get('id')) {
+        Session::flash('approvalmanag', 'Something went wrong!');
+        Logs::addError("Incorrect address! Wrong ID.");
+        Redirect::to('approvalsmanag.php');
+    }
 
-$approvals = new Approval();
-$approval = $approvals->getApproval(array('AgreementGuid', '=', Input::get('id')));
+    $approvals = new Approval();
+    $approval = $approvals->getApproval(array('AgreementGuid', '=', Input::get('id')));
 
-if(!$approval) {
-    Session::flash('approvalmanag', 'Something went wrong!');
-    Logs::addError("Incorrect address! Agreement dont exists.");
-    Redirect::to('approvalsmanag.php');
-}
+    if(!$approval) {
+        Session::flash('approvalmanag', 'Something went wrong!');
+        Logs::addError("Incorrect address! Agreement dont exists.");
+        Redirect::to('approvalsmanag.php');
+    }
 
 
+    $db = DBB::getInstance();
+
+    // ID agreement
+    $id_hash = Input::get('id');
+    $agreement_id = $db->query("SELECT ID, Title, Version FROM agreements_configuration WHERE AgreementGuid = '{$id_hash}';")->firstResult();
 
 ?>
-
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
 
     <?php include_once Config::get('includes/second_index'); ?>
-
-    <script>
-        // class='table-success'>
-        function add_class() {
-            prompt("Działa");
-            const tr = this.parentElement.classList.add("table-success");
-        }
-    </script>
 
 </HEAD>
 <BODY class="bg-secondary">
@@ -54,7 +49,9 @@ if(!$approval) {
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Managment - add users to approval!</h2>
+            <h2>Managment users to <?php echo $agreement_id->Title .' v'. $agreement_id->Version; ?>.0!</h2>
+            <br>
+
             <br>
             <?php
 
@@ -65,53 +62,77 @@ if(!$approval) {
                 if(Input::exists()) {
                     if(Token::check(Input::get('token'))) {
 
-                        $db = DBB::getInstance();
-                        $user_hash = "'"; // values to select
+//                        $users_agreement_add = [];
+//                        $users_agreement_remove = [];
 
-                        //IDs with form
-                        foreach ($_POST as $key => $item) {
-                            if($key != 'token') {
-                                $user_hash .= $key . "', '";
+                        $exists_agree = $db->query('SELECT IDUsers, AcceptAgreement FROM agreements WHERE `IDagreementsConfiguration` = '. (int)$agreement_id->ID .' ORDER BY IDUsers ASC')->results();
+//                        echo var_dump($exists_agree) .'<br><br>';
+//                        echo var_dump($_POST);
+
+                        //add new agreements
+                        foreach($_POST as $name => $new_agree) {
+                            if($name != 'token') {
+                                $exist = false;
+                                foreach($exists_agree as $agree) {
+                                    if($agree->IDUsers == $new_agree) {
+                                        $exist = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!$exist) {
+                                    echo $new_agree . '<br/>';
+                                }
                             }
                         }
 
-                        // IDs users to add
-                        $user_hash = substr($user_hash, 0 ,-3); //DELETE LAST  THREE CHARS
-                        $users_id = $db->query("SELECT ID, IDHash FROM users WHERE IDHash IN ({$user_hash}) ORDER BY ID ASC;")->results();
-                        unset($user_hash);
-                        // ID agreement
-                        $id_hash = Input::get('id');
-                        $agreement_id = $db->query("SELECT ID, Title FROM agreements_configuration WHERE AgreementGuid = '{$id_hash}';")->firstResult();
+                        echo '<hr/>';
 
-                        if(count($users_id) == ((int)count($_POST)-1)){
-                            $index = 0;
-                            $users_agreement = [];
-
-                            foreach($users_id as $one_user) {
-                                if(!$db->query('SELECT * FROM `agreements` WHERE `IDagreementsConfiguration` = '. (int)$agreement_id->ID .' AND `IDUsers` = '. (int)$one_user->ID)->count()) {
-                                    $users_agreement[] = array(
-                                        'IDUsers' => (int)$one_user->ID,
-                                        'IDagreementsConfiguration' => (int)$agreement_id->ID,
-                                        'AccessGuid' => hash('sha256', $agreement_id->Title . ' ' . $one_user->ID . ' ' . date('Y-m-d H:i:s')), //dodać tytuł i imie nazwisko usera oraz date
-                                        'Password' => hash('sha256', '$tring1234'),
-                                        'PasswordValidity' => '2020-04-13 18:12:11',
-                                        'AddedBy' => $user->data()->ID,
-                                        'AddedAt' => date('Y-m-d H:i:s')
-                                    );
+                        //delete agreement if user doesnt set answer
+                        foreach($exists_agree as $agree) {
+                            $exist = false;
+                            foreach($_POST as $name => $remove_agree) {
+                                if($agree->IDUsers == $remove_agree) {
+                                    $exist = true;
+                                    break;
                                 }
+
                             }
 
-                            foreach($users_agreement as $user_agreement) {
-                                try {
-                                    $db->insert('agreements', $user_agreement);
-                                }catch (Exception $e) {
-                                    die('#2321: Error: '. $e->getMessage());
-                                }
+                            if(!$exist && $agree->AcceptAgreement == NULL) {
+                                echo $agree->IDUsers . '<br/>';
                             }
-
-                            Session::flash('success','Added '. (count($_POST)-1) .' users!');
-                            Redirect::to('approvusers.php?id='. Input::get('id') .'&page='. Input::get('page'));
                         }
+
+
+
+//                        if(count($users_id) == ((int)count($_POST)-1)){
+//
+//                            foreach($users_id as $one_user) {
+//                                if(!$db->query('SELECT * FROM `agreements` WHERE `IDagreementsConfiguration` = '. (int)$agreement_id->ID .' AND `IDUsers` = '. (int)$one_user->ID)->count()) {
+//                                    $users_agreement_add[] = array(
+//                                        'IDUsers' => (int)$one_user->ID,
+//                                        'IDagreementsConfiguration' => (int)$agreement_id->ID,
+//                                        'AccessGuid' => hash('sha256', $agreement_id->Title . ' ' . $one_user->ID . ' ' . date('Y-m-d H:i:s')), //dodać tytuł i imie nazwisko usera oraz date
+//                                        'Password' => hash('sha256', '$tring1234'),
+//                                        'PasswordValidity' => '2020-04-13 18:12:11',
+//                                        'AddedBy' => $user->data()->ID,
+//                                        'AddedAt' => date('Y-m-d H:i:s')
+//                                    );
+//                                }
+//                            }
+//
+//                            foreach($users_agreement_add as $user_agreement) {
+//                                try {
+//                                    $db->insert('agreements', $user_agreement);
+//                                }catch (Exception $e) {
+//                                    die('#2321: Error: '. $e->getMessage());
+//                                }
+//                            }
+//
+//                            Session::flash('success','Added '. (count($_POST)-1) .' users!');
+//                            Redirect::to('approvusers.php?id='. Input::get('id') .'&page='. Input::get('page'));
+//                        }
 
                     }
                 }
@@ -121,12 +142,12 @@ if(!$approval) {
 
             <div class="table-responsive">
 
-                <form action="" method="post">
+                <form action="" method="post" name="managment_users">
 
                     <table class="table table-light table-striped table-hover">
                         <thead class="thead-dark table-sm">
                         <tr>
-                            <th scope="col" class="text-center">Select</th>
+                            <th scope="col" class="text-center"><input type="checkbox" name="select_all">Select</th>
                             <th scope="col">Lp.</th>
                             <th scope="col">Login</th>
                             <th scope="col">Imię</th>
@@ -134,7 +155,6 @@ if(!$approval) {
                         </tr>
                         </thead>
                         <tbody class="table-sm small">
-
                             <?php
 
                             //Set default value if variables are wrong type
@@ -151,13 +171,13 @@ if(!$approval) {
                             $users = $data->results();
 
                             foreach($users as $u) {
-                                echo "\n<tr>\n";
-                                echo '<td class="text-center"><input type="checkbox" name="'. $u->IDHash .'" onCheck="add_class();"></td>';
+                                echo "\n<tr>\t";
+                                echo '<td class="text-center'. (($u->IDagreementsConfiguration != NULL) ? " table-success" : "") .'"><input type="checkbox" name="'. $u->IDHash .'" value="'. $u->ID .'"'. (($u->IDagreementsConfiguration != NULL) ? " checked" : "") . (($u->AcceptAgreement != NULL) ? " disabled" : "") .'></td>';
                                 echo '<td>'.$u->ID .'</td>';
                                 echo '<td>'.$u->Email .'</td>';
                                 echo '<td>'.$u->FirstName .'</td>';
                                 echo '<td>'.$u->LastName .'</td>';
-                                echo "\n</tr>";
+                                echo "\t</tr>";
                             }
 
                             ?>
@@ -166,7 +186,7 @@ if(!$approval) {
                     </table>
 
                     <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-                    <input type="submit" value="Zapisz" class="btn btn-primary">
+                    <input type="hidden" name="agreemet" value="<?php echo $approval->ID; ?>">
 
                 </form>
 
@@ -180,7 +200,7 @@ if(!$approval) {
 
 
                         // previously page
-                        echo '<li class="page-item'. ((Input::get('page') == 1) ? ' disabled': '' ).'"><a class="page-link" href="approvusers.php?id='. Input::get('id').'&page='. ((int)Input::get('page')-1) .'">&lt;&lt;</a></li>';
+                        echo '<li class="page-item'. ((Input::get('page') == 1) ? ' disabled': '' ).'"><a class="page-link" href="approvusers.php?id='. Input::get('id') . escape('&') .'page='. ((int)Input::get('page')-1) .'">'. escape('<<') ."</a></li>\n";
 
                         // button with numer of pages
                         $start = (((Input::get('page') - 2) > 0) ? (Input::get('page') - 2) : 1);
@@ -188,27 +208,21 @@ if(!$approval) {
 
 
                         for($i = $start; $i <= $end; $i++) {
-                        echo '<li class="page-item'. ((Input::get('page')==$i) ? ' active' : '') .'"><a class="page-link" href="approvusers.php?id='. Input::get('id') .'&page='. $i .'">'. $i .'</a></li>';
+                        echo '<li class="page-item'. ((Input::get('page')==$i) ? ' active' : '') .'"><a class="page-link" href="approvusers.php?id='. Input::get('id') . escape('&page=') . $i .'">'. $i ."</a></li>\n";
                         }
 
                         // next pages
-                        echo '<li class="page-item'. ((Input::get('page') == $all_pages) ? ' disabled': '') .'"><a class="page-link" href="approvusers.php?id='. Input::get('id').'&page='. ((int)Input::get('page')+1) .'">&gt;&gt;</a></li>';
+                        echo '<li class="page-item'. ((Input::get('page') == $all_pages) ? ' disabled': '') .'"><a class="page-link" href="approvusers.php?id='. Input::get('id') . escape('&') .'page='. ((int)Input::get('page')+1) .'">'. escape('>>') .'</a></li>';
 
                     ?>
 
                     </ul>
                 </nav>
 
-            </div>
-
-
-
-
-
         </div>
         <div class="col-1 col-md-2 col-lg-2"></div>
     </div>
 </div>
-
+    <script src="../includes/JS/ajax.js"></script>
 </BODY>
-</HTML>{
+</HTML>

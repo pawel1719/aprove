@@ -56,7 +56,6 @@ if(!$user->isLogged()) {
                     </tr>
                     </thead>
                     <tbody class="table-sm">
-
                     <?php
 
                         $approvals = new Approval();
@@ -64,20 +63,21 @@ if(!$user->isLogged()) {
                         $no = 1;
 
                         foreach($approvals as $approval) {
-                            echo "<tr>\n";
+                            echo "\n<tr>\t";
                             echo '<td class="small">'. $no .'</td>';
                             echo '<td class="small">'. $approval->Title .'</td>';
                             echo '<td class="small">'. $approval->Version .'.0</td>';
                             echo '<td class="small">'. ((($approval->IsActived) == 1) ? 'Tak' : 'Nie') .'</td>';
                             echo '<td class="small">'. $approval->DateStart .'</td>';
                             echo '<td class="small">'. $approval->DateEnd .'</td>';
-                            echo '<td class="text-center small"><a href="approvusers.php?id='. $approval->AgreementGuid .'&page=1">Zarządzaj</a></td>';
+                            echo '<td class="text-center small"><a href="approvusers.php?id='. $approval->AgreementGuid . escape('&page=1') .'">Zarządzaj</a></td>';
                             echo '<td class="text-center small"><a href="approvmanag.php?approval='. $approval->AgreementGuid .'">Edytuj</a></td>';
-                            echo '</tr>';
+                            echo "\t</tr>";
                             $no++;
                         }
 
                     ?>
+
                     </tbody>
                 </table>
             </div>

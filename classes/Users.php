@@ -22,18 +22,18 @@ class Users {
         return $users;
     }
 
-    public function usersToAgreements($agreement, $offset = 10, $row_count = 15, $in_group = 'NOT') {
+    public function usersToAgreements($agreement, $offset = 10, $row_count = 15) {
         $users = $this->_db->query("SELECT 
+                                            u.ID,
+                                            a.IDagreementsConfiguration, a.AcceptAgreement,
                                             u.*, ud.* 
                                         FROM users u LEFT JOIN users_data ud ON u.ID=ud.IDUsers
-                                        WHERE u.ID {$in_group} IN (	SELECT a.IDUsers 
-                                                            FROM agreements a 
-                                                            WHERE a.IDagreementsConfiguration = {$agreement}
-                                                        )
+                                                     LEFT JOIN agreements a  ON u.ID=a.IDUsers AND a.IDagreementsConfiguration = {$agreement}
+                                        ORDER BY a.IDagreementsConfiguration DESC, u.ID ASC
                                         LIMIT {$offset}, {$row_count};");
 
         if(!$users) {
-            Logs::addError("#122 Can't get users to agreement. Variable: agreement = {$agreement}, offset = {$offset}, row_count = {$row_count}, in_group = {$in_group}");
+            Logs::addError("#122 Can't get users to agreement. Variable: agreement = {$agreement}, offset = {$offset}, row_count = {$row_count}");
             throw new Exception('#122 Cant get users to agreement!');
         }
 

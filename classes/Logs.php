@@ -29,6 +29,10 @@ class Logs {
             $path = '../files/logs/';
         } else if(is_dir('../../files/logs')) {
             $path = '../../files/logs/';
+        } else if(is_dir('../../../files/logs')) {
+            $path = '../../../files/logs/';
+        } else if(is_dir('../../../../files/logs')) {
+            $path = '../../../../files/logs/';
         }
 
         $path .= 'Logs_' . date('Y-m') . '.txt';
