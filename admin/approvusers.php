@@ -23,12 +23,7 @@ require_once '../core/init.php';
         Redirect::to('approvalsmanag.php');
     }
 
-
     $db = DBB::getInstance();
-
-    // ID agreement
-    $id_hash = Input::get('id');
-    $agreement_id = $db->query("SELECT ID, Title, Version FROM agreements_configuration WHERE AgreementGuid = '{$id_hash}';")->firstResult();
 
 ?>
 <!DOCTYPE html>
@@ -49,7 +44,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Managment users to <?php echo $agreement_id->Title .' v'. $agreement_id->Version; ?>.0!</h2>
+            <h2>Managment users to <?php echo $approval->Title .' v'. $approval->Version; ?>.0!</h2>
             <br>
 
             <br>
@@ -65,7 +60,7 @@ require_once '../core/init.php';
 //                        $users_agreement_add = [];
 //                        $users_agreement_remove = [];
 
-                        $exists_agree = $db->query('SELECT IDUsers, AcceptAgreement FROM agreements WHERE `IDagreementsConfiguration` = '. (int)$agreement_id->ID .' ORDER BY IDUsers ASC')->results();
+                        $exists_agree = $db->query('SELECT IDUsers, AcceptAgreement FROM agreements WHERE `IDagreementsConfiguration` = '. (int)$approval->ID .' ORDER BY IDUsers ASC')->results();
 //                        echo var_dump($exists_agree) .'<br><br>';
 //                        echo var_dump($_POST);
 
@@ -109,7 +104,7 @@ require_once '../core/init.php';
 //                        if(count($users_id) == ((int)count($_POST)-1)){
 //
 //                            foreach($users_id as $one_user) {
-//                                if(!$db->query('SELECT * FROM `agreements` WHERE `IDagreementsConfiguration` = '. (int)$agreement_id->ID .' AND `IDUsers` = '. (int)$one_user->ID)->count()) {
+//                                if(!$db->query('SELECT * FROM `agreements` WHERE `IDagreementsConfiguration` = '. (int)$approval->ID .' AND `IDUsers` = '. (int)$one_user->ID)->count()) {
 //                                    $users_agreement_add[] = array(
 //                                        'IDUsers' => (int)$one_user->ID,
 //                                        'IDagreementsConfiguration' => (int)$agreement_id->ID,

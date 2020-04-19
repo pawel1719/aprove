@@ -37,27 +37,38 @@ class Approval {
             ,ac2.DateEnd
             ,ac2.AgreementGuid
             ,ac2.CreateAt
-        FROM agreements_configuration ac LEFT JOIN agreements_configuration ac2 ON ac.Title=ac2.Title #AND ac2.ID=(SELECT ID FROM agreements_configuration WHERE Title=ac.Title ORDER BY ID DESC LIMIT 1)
+        FROM agreements_configuration ac LEFT JOIN agreements_configuration ac2 ON ac.Title=ac2.Title
         ORDER BY ac.Title ASC, ac2.Version DESC');
+
+        if(!$this->_data)
+        {
+            Logs::addError('#133 Cant find agreement!');
+            throw new Exception('#133 Cant find agreement!');
+        }
 
         return $this->_data->results();
     }
 
-    public function getApproval($where = array()) {
+    public function getApproval($where = array())
+    {
         $data = $this->_db->get('agreements_configuration', $where);
 
-        if(!$data) {
-            throw new Exception("#132 Cant find data");
+        if(!$data)
+        {
+            Logs::addError('#132 Cant find data');
+            throw new Exception('#132 Cant find data');
         }
 
         return $data->firstResult();
     }
 
-    public function update($id = null, $fields = array()) {
+    public function update($id = null, $fields = array())
+    {
         $fields['UpdatedAt'] = date('Y-m-d H:i:s');
         $fields['IsActived']     = ($fields['IsActived']== 'on') ? 1 : 0;
 
-        if(!$this->_db->update('agreements_configuration', $id, $fields)) {
+        if(!$this->_db->update('agreements_configuration', $id, $fields))
+        {
             throw new Exception('There was a problem updating!');
         }
     }

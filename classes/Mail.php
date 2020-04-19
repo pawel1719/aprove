@@ -33,10 +33,11 @@ class Mail {
 
         try {
             $this->_mail->Send();
-//            $reciver = $name_to . ' (' . $address_to . ')';
-//            $sender = $this->_mail->FromName . ' (' . $this->_mail->From .')';
+            // $reciver = $name_to . ' (' . $address_to . ')';
+            // $sender = $this->_mail->FromName . ' (' . $this->_mail->From .')';
         }catch(Exception $e) {
             echo 'Error send message!<br/>' . $e->getMessage();
+            Logs::addError('Cant send mail! Message '. $e->getMessage() .' Line: '. $e->getLine() .' File: '. $e->getFile());
         }
     }
 
@@ -106,6 +107,17 @@ class Mail {
 
     public function setAddressBCC($bcc, $bcc_name = '') {
         return $this->_mail->AddBCC($bcc, $bcc_name);
+    }
+
+    public function sendMail()
+    {
+        try {
+            // sending mail
+            $this->_mail->Send();
+        }catch(Exception $e) {
+            echo 'Error send message!<br/>' . $e->getMessage();
+            Logs::addError('Cant send mail! Message '. $e->getMessage() .' Line: '. $e->getLine() .' File: '. $e->getFile());
+        }
     }
 
     public function toString() {
