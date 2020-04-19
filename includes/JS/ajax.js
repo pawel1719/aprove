@@ -32,6 +32,7 @@ function manage_agree(form_input) {
     myData.append("user_id", user_id);
     myData.append("status", status);
 
+
     fetch('../includes/JS/Request/Request.php?case=1', {
             method: 'POST',
             // headers: myHeader,
@@ -41,6 +42,7 @@ function manage_agree(form_input) {
         .then(resp => {
             //result for request
             console.log(resp);
+            sleep(1500);
         })
         .catch(error => {
             //results for the errors conection
@@ -81,15 +83,24 @@ form.addEventListener("change", function (e) {
 function changeAllValues(value) {
     const inputs = document.querySelectorAll(".container form input[type=checkbox]");
     for (var i = 0; i < inputs.length; i++) {
-        inputs[i].checked = value
-        if (value == true && inputs[i].name != "select_all") {
-            inputs[i].parentElement.parentElement.classList.add('table-success');
-            inputs[i].parentElement.parentElement.classList.remove('table-danger');
+        if (inputs[i].checked != value) {
+            inputs[i].checked = value;
             manage_agree(inputs[i]);
+        }
+        if (value == true && inputs[i].name != "select_all") {
+            inputs[i].parentElement.parentElement.classList.remove('table-danger');
+            inputs[i].parentElement.parentElement.classList.add('table-success');
         } else if (value == false && inputs[i].name != "select_all") {
             inputs[i].parentElement.parentElement.classList.remove('table-success');
             inputs[i].parentElement.parentElement.classList.add('table-danger');
-            manage_agree(inputs[i]);
         }
     }
+}
+
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+        currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
 }

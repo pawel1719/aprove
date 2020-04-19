@@ -30,8 +30,19 @@ require_once 'core/init.php';
                 Hello <?php  echo $user->data()->Email; ?>! <br/><br/>
 
                 <?php
-                    echo $user->getUserGroup() . '<br/>';
-                    echo $user->hasPermission('admin');
+//                    echo $user->getUserGroup() . '<br/>';
+//                    echo $user->hasPermission('admin');
+
+                    $approval = new Approval();
+                    $approval_data = $approval->userApproval('WHERE a.IDUsers = '. $user->data()->ID .' ORDER BY a.ID DESC');
+
+                    foreach($approval_data as $a)
+                    {
+                        echo $a->Title .' - ';
+                        echo $a->Version .'.0 - ';
+                        echo '<a href="approvalusers.php?id='. $a->AccessGuid .'"><button>'. $a->AccessGuid .'</button></a><br>';
+                    }
+//                    echo var_dump($approval_data);
 
                 ?>
 

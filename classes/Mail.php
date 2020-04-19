@@ -36,7 +36,7 @@ class Mail {
             // $reciver = $name_to . ' (' . $address_to . ')';
             // $sender = $this->_mail->FromName . ' (' . $this->_mail->From .')';
         }catch(Exception $e) {
-            echo 'Error send message!<br/>' . $e->getMessage();
+            echo 'Error send message! ' . $e->getMessage();
             Logs::addError('Cant send mail! Message '. $e->getMessage() .' Line: '. $e->getLine() .' File: '. $e->getFile());
         }
     }

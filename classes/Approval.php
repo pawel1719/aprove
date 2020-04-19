@@ -62,6 +62,27 @@ class Approval {
         return $data->firstResult();
     }
 
+    public function userApproval($where)
+    {
+        $data = $this->_db->query("SELECT a.*, u.Email, u.IDHash, ud.FirstName, ud.MiddleName, ud.LastName, ac.*
+                                        FROM agreements a 	LEFT JOIN users u ON a.IDUsers=u.ID
+                                                            LEFT JOIN users_data ud ON a.IDUsers=ud.IDUsers
+                                                            LEFT JOIN agreements_configuration ac ON a.IDagreementsConfiguration=ac.ID "
+                                        . $where);
+        if(!$data)
+        {
+            Logs::addError('#134 Cant find data for agreement!');
+            throw new Exception('#134 Cant find data user for agreement!');
+        }
+
+        if($data->count())
+        {
+            return $data->results();
+        }
+
+        return false;
+    }
+
     public function update($id = null, $fields = array())
     {
         $fields['UpdatedAt'] = date('Y-m-d H:i:s');

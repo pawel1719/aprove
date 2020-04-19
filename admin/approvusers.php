@@ -46,7 +46,9 @@ require_once '../core/init.php';
 
             <h2>Managment users to <?php echo $approval->Title .' v'. $approval->Version; ?>.0!</h2>
             <br>
-
+            <div class="spinner-border" role="status" style="display: none;">
+                <span class="sr-only">Loading...</span>
+            </div>
             <br>
             <?php
 
@@ -54,88 +56,10 @@ require_once '../core/init.php';
                     echo '<div class="alert alert-success">'. Session::flash('success') .'</div>';
                 }
 
-                if(Input::exists()) {
-                    if(Token::check(Input::get('token'))) {
-
-//                        $users_agreement_add = [];
-//                        $users_agreement_remove = [];
-
-                        $exists_agree = $db->query('SELECT IDUsers, AcceptAgreement FROM agreements WHERE `IDagreementsConfiguration` = '. (int)$approval->ID .' ORDER BY IDUsers ASC')->results();
-//                        echo var_dump($exists_agree) .'<br><br>';
-//                        echo var_dump($_POST);
-
-                        //add new agreements
-                        foreach($_POST as $name => $new_agree) {
-                            if($name != 'token') {
-                                $exist = false;
-                                foreach($exists_agree as $agree) {
-                                    if($agree->IDUsers == $new_agree) {
-                                        $exist = true;
-                                        break;
-                                    }
-                                }
-
-                                if(!$exist) {
-                                    echo $new_agree . '<br/>';
-                                }
-                            }
-                        }
-
-                        echo '<hr/>';
-
-                        //delete agreement if user doesnt set answer
-                        foreach($exists_agree as $agree) {
-                            $exist = false;
-                            foreach($_POST as $name => $remove_agree) {
-                                if($agree->IDUsers == $remove_agree) {
-                                    $exist = true;
-                                    break;
-                                }
-
-                            }
-
-                            if(!$exist && $agree->AcceptAgreement == NULL) {
-                                echo $agree->IDUsers . '<br/>';
-                            }
-                        }
-
-
-
-//                        if(count($users_id) == ((int)count($_POST)-1)){
-//
-//                            foreach($users_id as $one_user) {
-//                                if(!$db->query('SELECT * FROM `agreements` WHERE `IDagreementsConfiguration` = '. (int)$approval->ID .' AND `IDUsers` = '. (int)$one_user->ID)->count()) {
-//                                    $users_agreement_add[] = array(
-//                                        'IDUsers' => (int)$one_user->ID,
-//                                        'IDagreementsConfiguration' => (int)$agreement_id->ID,
-//                                        'AccessGuid' => hash('sha256', $agreement_id->Title . ' ' . $one_user->ID . ' ' . date('Y-m-d H:i:s')), //dodać tytuł i imie nazwisko usera oraz date
-//                                        'Password' => hash('sha256', '$tring1234'),
-//                                        'PasswordValidity' => '2020-04-13 18:12:11',
-//                                        'AddedBy' => $user->data()->ID,
-//                                        'AddedAt' => date('Y-m-d H:i:s')
-//                                    );
-//                                }
-//                            }
-//
-//                            foreach($users_agreement_add as $user_agreement) {
-//                                try {
-//                                    $db->insert('agreements', $user_agreement);
-//                                }catch (Exception $e) {
-//                                    die('#2321: Error: '. $e->getMessage());
-//                                }
-//                            }
-//
-//                            Session::flash('success','Added '. (count($_POST)-1) .' users!');
-//                            Redirect::to('approvusers.php?id='. Input::get('id') .'&page='. Input::get('page'));
-//                        }
-
-                    }
-                }
-
             ?>
             <br>
 
-            <div class="table-responsive">
+            <div class="table-responsive" id="table_users">
 
                 <form action="" method="post" name="managment_users">
 
