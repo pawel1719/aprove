@@ -59,10 +59,6 @@ require_once 'core/init.php';
 
             <?php
 
-            if(Session::exists('agreement_update')) {
-                echo '<div class="alert alert-success" role="alert">'. Session::flash('agreement_update') .'</div>';
-            }
-
             if(Input::exists()) {
                 if (Token::check(Input::get('token'))) {
 
@@ -73,7 +69,6 @@ require_once 'core/init.php';
                         )
                     ));
 
-                    echo Input::get('approval_1');
 
                     if ($validation->passed()) {
 
@@ -83,25 +78,53 @@ require_once 'core/init.php';
                         $to_hash .= 'Zaznaczone '. (Input::get('approval_1') == 'yes' ? 'Akceptuję' : 'Nie zgadzam się') .'. Data: '. date('Y-m-d H:i:s');
 
                         try {
-
+                            // saving answer user
                             $hash = hash('sha512', $to_hash);
                             $update = $approval->updateAgreement($approval_data[0]->ID_a, array(
                                 'AcceptAgreement' => (Input::get('approval_1') == 'yes' ? 1 : 0),
                                 'HashToAgrremnetForUser' => $hash
                             ));
-
-                            if(!$update) {
-                                echo 'success';
-                            }
-
                         } catch(Exception $e) {
+                            Logs::addError('Cant save approval answer! Message: '. $e->getMessage() .' Line: '. $e->getLine() .' File: '. $e->getFile());
                             echo $e->getMessage();
-                            die();
                         }
 
-                        Session::flash('agreement_update', 'Zgoda zaktualizowana!');
-//                        Input::destroy('title', 'content', 'start', 'end');
-//                        Redirect::to('approvmanag.php?approval='. $hash);
+                        if(!$update) {
+
+                            // data to message
+                            $address = $approval_data[0]->Email;
+                            $name = $approval_data[0]->FirstName .' '. $approval_data[0]->LastName;
+                            $subject = 'Gratulacje! Twoja odpowiedź została zapamiętana!';
+                            $body = "<HTML>
+                                <HEAD>
+                                    <meta charset=\"utf-8\">
+                                </HEAD>
+                                <BODY>
+                                    <p>
+                                        Dzień dobry,<br><br>
+                                        Dziekujęmy za udzielnie informacji dotyczącaj \"". $approval_data[0]->Title ."\" - wersji ". $approval_data[0]->Version .".0.<br>
+                                        Zawartość dokumentu jest dostępna z poziomu panelu apliakcji.
+                                    </p>
+                                    <p>
+                                        Pozdrawaimy,<br>
+                                        Approval app!
+                                    </p>
+                                </BODY>
+                                </HTML>";
+
+                            // create and send message
+                            $mail = new Mail();
+                            $mail->createMessage($address, $name, $subject, $body);
+                            unset($address, $name, $subject, $body);
+
+                            Session::flash('agreement_accept', 'Twoja decyzja została zapisana!');
+
+                            if($user->isLogged()) {
+                                Redirect::to('home.php');
+                            } else {
+                                Redirect::to('index.php');
+                            }
+                        }
 
                     } else {
                         // ERRORS FROM VALIDATION

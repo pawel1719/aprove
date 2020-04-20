@@ -1,19 +1,16 @@
-<button type="button" class="btn btn-warning">
+<button type="button" class="btn btn-light  mb-1 btn-outline-primary" style="width: auto;">
     <a href="home.php">Home</a>
 </button>
-<button type="button" class="btn btn-light">
+<button type="button" class="btn btn-light  mb-1 btn-outline-primary" style="width: auto;">
     <a href="changepassword.php">Change password</a>
 </button>
-<button type="button" class="btn btn-warning">
+<button type="button" class="btn btn-light  mb-1 btn-outline-primary" style="width: auto;">
     <a href="update.php">Update</a>
 </button>
-<button type="button" class="btn btn-light">
-    <a href="sendmail.php">Mail</a>
-</button>
-<button type="button" class="btn btn-warning">
+<button type="button" class="btn btn-light  mb-1 btn-outline-primary" style="width: auto;">
     <a href="admin/adminpanel.php">Admin panel</a>
 </button>
-<button type="button" class="btn btn-light">
+<button type="button" class="btn btn-light  mb-1 btn-outline-primary" style="width: auto;">
     <a href="logout.php">Log out</a>
 </button>
 

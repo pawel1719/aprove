@@ -23,3 +23,18 @@
         Users
     </button>
 </a>
+<a href="register.php">
+    <button type="button" class="btn btn-light  mb-1 btn-outline-primary"  style="width: 100px;">
+        Add user
+    </button>
+</a>
+<a href="sendmail.php">
+    <button type="button" class="btn btn-light mb-1 btn-outline-primary"  style="width: 100px;">
+        Mail
+    </button>
+</a>
+<a href="../logout.php">
+    <button type="button" class="btn btn-light mb-1 btn-outline-primary"  style="width: 100px;">
+        Log out
+    </button>
+</a>

@@ -46,23 +46,27 @@ require_once 'core/init.php';
                $user = new User();
                $login = $user->login(Input::get('email'), Input::get('password'));
 
-               $blocked = new DateTime($user->data()->BlockedTo);
-               $now     = new DateTime('now');
-
-               if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts')-1 &&
-                   $user->data()->BlockedTo < date('Y-m-d H:m:s')) {
-                   echo '<div class="alert alert-danger" role="alert">Account is blocked !</div>';
-               } else {
-                   if ($login) {
-                       Redirect::to('home.php');
-                   } else {
-                       if($user->data()->IsBlocked == 0 || $blocked < $now) {
-                           echo '<div class="alert alert-danger" role="alert">Sorry, login is faild!</div>';
-                       } else {
-                           echo '<div class="alert alert-danger" role="alert">Account is blocked! !</div>';
-                       }
-                   }
+               if ($login) {
+                   Redirect::to('home.php');
                }
+
+//               $blocked = new DateTime($user->data()->BlockedTo);
+//               $now     = new DateTime('now');
+//
+//               if($user->data()->InvalidAttemptCounter >= Config::get('user/number_failed_login_attempts')-1 &&
+//                   $user->data()->BlockedTo < date('Y-m-d H:m:s')) {
+//                   echo '<div class="alert alert-danger" role="alert">Account is blocked !</div>';
+//               } else {
+//                   if ($login) {
+//                       Redirect::to('home.php');
+//                   } else {
+//                       if($user->data()->IsBlocked == 0 || $blocked < $now) {
+//                           echo '<div class="alert alert-danger" role="alert">Sorry, login is faild!</div>';
+//                       } else {
+//                           echo '<div class="alert alert-danger" role="alert">Account is blocked! !</div>';
+//                       }
+//                   }
+//               }
            } else {
                // Save information to file with logs
                Logs::addWarning('Invalid attempt login! User: '. Input::get('email') .'. ');

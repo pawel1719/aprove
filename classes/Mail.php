@@ -2,11 +2,13 @@
 
 class Mail {
     private $_mail,
+            $_user,
             $_db;
 
     public function __construct($exception = true) {
         $this->_db = DBB::getInstance();
         $this->_mail = new PHPMailer($exception);
+        $this->_user = new User();
     }
 
     public function createMessage($address_to, $name_to, $subject, $body) {
@@ -32,9 +34,23 @@ class Mail {
         $this->_mail->AddBCC(Config::get('mail/adres_mail'), Config::get('mail/user_name'));
 
         try {
+            //sending mail
             $this->_mail->Send();
-            // $reciver = $name_to . ' (' . $address_to . ')';
-            // $sender = $this->_mail->FromName . ' (' . $this->_mail->From .')';
+
+            // save informatio to db
+            $this->_db->insert('sended_email', array(
+                'From' => $this->_mail->From .' - '. $this->_mail->FromName,
+                'To' => $address_to .' - '. $name_to,
+                'To_CC' => NULL,
+                'To_BCC' => Config::get('mail/adres_mail') .' - '. Config::get('mail/user_name'),
+                'Header' => $this->_mail->GetSentMIMEMessage(),
+                'Subject' => $this->_mail->Subject,
+                'Body' => $this->_mail->Body,
+                'Attachment' => NULL,
+                'Errors' => $this->_mail->ErrorInfo,
+                'DateSend' => date('Y-m-d H:i:s'),
+                'IdUser' => $this->_user->data()->ID
+            ));
         }catch(Exception $e) {
             echo 'Error send message! ' . $e->getMessage();
             Logs::addError('Cant send mail! Message '. $e->getMessage() .' Line: '. $e->getLine() .' File: '. $e->getFile());

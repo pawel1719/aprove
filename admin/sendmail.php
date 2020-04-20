@@ -1,5 +1,5 @@
 <?php
-require_once 'core/init.php';
+require_once '../core/init.php';
 
 $user = new User();
 
@@ -15,19 +15,20 @@ if(!$user->isLogged()) {
 <HTML>
 <HEAD>
 
-    <?php include_once Config::get('includes/main_index'); ?>
+    <?php include_once Config::get('includes/second_index'); ?>
 
 </HEAD>
 <BODY class="bg-secondary">
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col-1 col-md-2 col-lg-2"></div>
-        <div class="col-10 col-md-8 col-lg-8">
+        <div class="col-1 col-md-2 col-lg-2">
 
             <!-- App menu -->
-            <?php include_once Config::get('includes/main_menu'); ?>
+            <?php include_once Config::get('includes/second_admin_menu'); ?>
 
+        </div>
+        <div class="col-10 col-md-8 col-lg-8">
             <?php
 
             if(Input::exists()) {

@@ -29,20 +29,44 @@ require_once 'core/init.php';
 
                 Hello <?php  echo $user->data()->Email; ?>! <br/><br/>
 
+                <div class="table-responsive">
+                    <table class="table table-light table-striped table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Nr</th>
+                            <th scope="col">Tytuł</th>
+                            <th scope="col" class="text-center">Wersja</th>
+                            <th scope="col" class="text-center">Odpowiedź</th>
+                            <th scope="col" class="text-center">Zobacz</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-sm">
+
                 <?php
+
+                    if(Session::exists('agreement_accept')) {
+                        echo '<div class="alert alert-success" role="alert">'. Session::flash('agreement_accept') .'</div>';
+                    }
 //                    echo $user->getUserGroup() . '<br/>';
 //                    echo $user->hasPermission('admin');
 
                     $approval = new Approval();
                     $approval_data = $approval->userApproval('WHERE a.IDUsers = '. $user->data()->ID .' ORDER BY a.ID DESC');
+                    $no = 1; //counter to table
 
-                    foreach($approval_data as $a)
-                    {
-                        echo $a->Title .' - ';
-                        echo $a->Version .'.0 - ';
-                        echo '<a href="approvalusers.php?id='. $a->AccessGuid .'"><button>'. $a->AccessGuid .'</button></a><br>';
+
+                    if($approval_data != false) {
+                        foreach ($approval_data as $a) {
+                            echo "\n<tr>\t";
+                            echo '<td>'. $no .'</td>';
+                            echo '<td>'. $a->Title . '</td>';
+                            echo '<td class="text-center">'. $a->Version . '.0</td>';
+                            echo '<td class="text-center'. (($a->AcceptAgreement == 1) ? '">TAK' : (($a->AcceptAgreement === 0) ? '">NIE"' : ' bg-danger">BRAK')) .'</td>';
+                            echo '<td class="text-center">'. '<a href="approvalusers.php?id=' . $a->AccessGuid . '">Pokaż</a>';
+                            echo "\t</tr>";
+                            $no++;
+                        }
                     }
-//                    echo var_dump($approval_data);
 
                 ?>
 
