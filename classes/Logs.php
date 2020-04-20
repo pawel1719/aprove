@@ -35,7 +35,7 @@ class Logs {
             $path = '../../../../files/logs/';
         }
 
-        $path .= 'Logs_' . date('Y-m') . '.txt';
+        $path .= 'Logs_' . date('Y-m-d') . '.txt';
 
         return $path;
     }

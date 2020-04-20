@@ -64,10 +64,10 @@ class Approval {
 
     public function userApproval($where)
     {
-        $data = $this->_db->query("SELECT a.*, u.Email, u.IDHash, ud.FirstName, ud.MiddleName, ud.LastName, ac.*
+        $data = $this->_db->query('SELECT a.ID ID_a, a.*, u.Email, u.IDHash, ud.FirstName, ud.MiddleName, ud.LastName, ac.*
                                         FROM agreements a 	LEFT JOIN users u ON a.IDUsers=u.ID
                                                             LEFT JOIN users_data ud ON a.IDUsers=ud.IDUsers
-                                                            LEFT JOIN agreements_configuration ac ON a.IDagreementsConfiguration=ac.ID "
+                                                            LEFT JOIN agreements_configuration ac ON a.IDagreementsConfiguration=ac.ID '
                                         . $where);
         if(!$data)
         {
@@ -86,9 +86,22 @@ class Approval {
     public function update($id = null, $fields = array())
     {
         $fields['UpdatedAt'] = date('Y-m-d H:i:s');
-        $fields['IsActived']     = ($fields['IsActived']== 'on') ? 1 : 0;
+        $fields['IsActived'] = ($fields['IsActived']== 'on') ? 1 : 0;
 
         if(!$this->_db->update('agreements_configuration', $id, $fields))
+        {
+            throw new Exception('There was a problem updating!');
+        }
+    }
+
+    public function updateAgreement($id = null, $fields = array())
+    {
+        $fields['DataAccept'] = date('Y-m-d H:i:s');
+        $fields['IPAddress '] = Input::get('REMOTE_ADDR');
+        $fields['Port'] = Input::get('REMOTE_PORT');
+        $fields['Device'] = Input::get('HTTP_USER_AGENT');
+
+        if(!$this->_db->update('agreements', $id, $fields))
         {
             throw new Exception('There was a problem updating!');
         }

@@ -63,11 +63,11 @@ require_once 'core/init.php';
                     ));
 
                     if($validate->passed()) {
-                        if($approval_data[0]->Email == Input::get('login') && $approval_data->Password == hash('sha256', Input::get('password')))
+                        if($approval_data[0]->Email == Input::get('login') && $approval_data[0]->Password == hash('sha256', Input::get('password')))
                         {
                             // success login
                             Cookie::put('token', Token::generate(), 5);
-                            Redirect::to('approvalusers.php?id='. $approval_data->AccessGuid);
+                            Redirect::to('approvalusers.php?id='. $approval_data[0]->AccessGuid);
 
                         } else {
                             // incorrect login

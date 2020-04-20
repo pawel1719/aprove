@@ -1,6 +1,7 @@
 <?php
 require_once 'core/init.php';
 
+
     $user = new User();
 
     if(!$user->isLogged() && !Token::check(Cookie::get('token')))
@@ -11,7 +12,7 @@ require_once 'core/init.php';
 
 
 
-    if(!Input::get('id'))
+    if(!Input::exists('get'))
     {
         Logs::addError("Incorrect address! Wrong approval");
         if($user->isLogged()) {
@@ -22,10 +23,10 @@ require_once 'core/init.php';
     }
 
     $approval = new Approval();
-    $approval_data = $approval->userApproval("WHERE a.AccessGuid = '". Input::get('id') ."' ");
-//    echo var_dump($approval_data);
+    $id = Input::get('id');
+    $approval_data = $approval->userApproval("WHERE a.AccessGuid = '{$id}' ");
 
-    if(!$approval) {
+    if(!$approval_data) {
         Logs::addError("Incorrect address! Approval dont exist.");
         if($user->isLogged()) {
             Redirect::to('home.php');
@@ -33,6 +34,10 @@ require_once 'core/init.php';
             Redirect::to('index.php');
         }
     }
+
+    // data approval
+    $title = $approval_data[0]->Title;
+    $body = $approval_data[0]->Content;
 
 ?>
 
@@ -63,42 +68,31 @@ require_once 'core/init.php';
 
                     $validation = new Validation();
                     $validation->check($_POST, array(
-                        'title' => array(
-                            'required' => true,
-                            'min' => 5,
-                            'max' => 150
-                        ),
-                        'content' => array(
-                            'required' => true,
-                            'min' => 12
-                        ),
-                        'start' => array(
-                            'required' => true
-                        ),
-                        'end' => array(
+                        'approval_1' => array(
                             'required' => true
                         )
                     ));
 
+                    echo Input::get('approval_1');
 
                     if ($validation->passed()) {
 
-                        try {
-                            $hash = md5(Input::get('title') . Input::get('content'));
+                        $to_hash = 'Tytuł: '. Input::get('title') .".\n";
+                        $to_hash = 'Treść: '. Input::get('content') .".\n";
+                        $to_hash .= 'Dokument przygotowany dla: '. Input::get('name') .' '. Input::get('surname') ."\n";
+                        $to_hash .= 'Zaznaczone '. (Input::get('approval_1') == 'yes' ? 'Akceptuję' : 'Nie zgadzam się') .'. Data: '. date('Y-m-d H:i:s');
 
-                            $approvals->update($approval->ID, array(
-                                'AgreementGuid' => $hash,
-                                'Title'         => Input::get('title'),
-                                'Content'       => Input::get('content'),
-                                'DateStart'     => Input::get('start'),
-                                'DateEnd'       => Input::get('end'),
-                                'IsActived'     => Input::get('is_active'),
-                                'UpdatedBy'     => $user->data()->ID
+                        try {
+
+                            $hash = hash('sha512', $to_hash);
+                            $update = $approval->updateAgreement($approval_data[0]->ID_a, array(
+                                'AcceptAgreement' => (Input::get('approval_1') == 'yes' ? 1 : 0),
+                                'HashToAgrremnetForUser' => $hash
                             ));
 
-                            //Updating HASH to agreement which one is watched
-                            Input::set('approval', $hash, 'get');
-
+                            if(!$update) {
+                                echo 'success';
+                            }
 
                         } catch(Exception $e) {
                             echo $e->getMessage();
@@ -106,8 +100,8 @@ require_once 'core/init.php';
                         }
 
                         Session::flash('agreement_update', 'Zgoda zaktualizowana!');
-                        Input::destroy('title', 'content', 'start', 'end');
-                        Redirect::to('approvmanag.php?approval='. $hash);
+//                        Input::destroy('title', 'content', 'start', 'end');
+//                        Redirect::to('approvmanag.php?approval='. $hash);
 
                     } else {
                         // ERRORS FROM VALIDATION
@@ -127,17 +121,53 @@ require_once 'core/init.php';
 
             <form action="" method="post" class="text-light mt-1">
 
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" name="title" id="title" value="<?php echo $approval_data[0]->Title; ?>" autocomplete="on" class="form-control" readonly>
+                <div class="form-group form-row">
+                    <label for="title">Tytuł</label>
+                    <input type="text" name="title" id="title" value="<?php echo $title; ?>" autocomplete="on" class="form-control" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea name="content" id="content" class="form-control" rows="14" readonly><?php echo $approval_data[0]->Content; ?></textarea>
+                    <label for="content">Treść</label>
+                    <textarea name="content" id="content" class="form-control" rows="<?php echo ceil((strlen($body)/95)+(substr_count($body, "\n" ))); ?>" readonly><?php echo $body; ?></textarea>
                 </div>
-
-                <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-                <input type="submit" value="Aktualizuj zgodę" class="btn btn-primary float-right">
+                <div class="form-group">
+                    <input type="text" name="desc" id="desc" value="Dokument przygotowany dla" class="form-control" readonly>
+                </div>
+                <div class="form-group form-row">
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Imie</div>
+                            </div>
+                                <input type="text" name="name" id="name" value="<?php echo $approval_data[0]->FirstName; ?>" autocomplete="on" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Nazwisko</div>
+                            </div>
+                        <input type="text" name="surname" id="surname" value="<?php echo $approval_data[0]->LastName; ?>" autocomplete="on" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-5">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="approval_1" name="approval_1" value="yes" class="custom-control-input">
+                            <label class="custom-control-label" for="approval_1">Akceptuję</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="approval_2" name="approval_1" value="no" class="custom-control-input" required>
+                            <label class="custom-control-label" for="approval_2">Nie zgadzam się</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="form-group form-row">
+                    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+                    <input type="submit" value="Zapisz" class="btn btn-primary" style="margin-left: auto; margin-right: auto;">
+                </div>
 
             </form>
 
