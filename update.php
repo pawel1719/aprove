@@ -18,7 +18,7 @@ if(!$user->isLogged()) {
 
     <style>
         *, ::before, ::after {
-            box-sizing: content-box;
+            box-sizing: border-box;
         }
         @media all and (min-width:1200px) {
             .field-size {
@@ -32,13 +32,17 @@ if(!$user->isLogged()) {
                 box-sizing: border-box;
             }
         }
+        .set_center {
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 
 </HEAD>
 <BODY class="bg-secondary">
 
 <div class="container">
-    <div class="row">
+    <div class="row mt-2">
         <div class="col-1 col-md-3 col-lg-1"></div>
         <div class="col-10 col-md-6 col-lg-10">
 
@@ -183,7 +187,7 @@ if(Input::exists()) {
             <form action="" method="post" class="text-light mt-5">
 
                 <div class="form-row">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="First_Name">First name</span>
                         </div>
@@ -195,7 +199,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="First_Name">Middle name</span>
                         </div>
@@ -207,7 +211,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Last_Name">Last name</span>
                         </div>
@@ -219,7 +223,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="First_Name">Family name</span>
                         </div>
@@ -231,7 +235,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Date_Of_Birth">Date of birth</span>
                         </div>
@@ -243,7 +247,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="City_Of_Birth">City of birth</span>
                         </div>
@@ -255,7 +259,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Phone_Number">Phone number</span>
                         </div>
@@ -267,7 +271,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="PESEL">PESEL</span>
                         </div>
@@ -279,7 +283,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Company_Name">Company name</span>
                         </div>
@@ -291,7 +295,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Work_Position">Work position</span>
                         </div>
@@ -305,7 +309,7 @@ if(Input::exists()) {
 
                 <!-- Identyficator card -->
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Identification_Card">Identification card</span>
                         </div>
@@ -316,7 +320,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Identification_Card">Identification card</span>
                         </div>
@@ -324,7 +328,7 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="Expiration_Date_Identification_Card">Expiration date ID</span>
                         </div>
@@ -334,7 +338,7 @@ if(Input::exists()) {
 
                 <!-- Data living -->
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="City_Of_Living">Living data</span>
                         </div>
@@ -345,33 +349,33 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="City_Of_Living">City of living</span>
+                            <span class="input-group-text field-size" id="City_Of_Living">City</span>
                         </div>
                         <input type="text" name="City_Of_Living" id="City_Of_Living" value="<?php echo escape($user->dataDetails()->CityOfLiving); ?>" class="form-control">
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="Street_Of_Living">Street of living</span>
+                            <span class="input-group-text field-size" id="Street_Of_Living">Street</span>
                         </div>
                         <input type="text" name="Street_Of_Living" id="Street_Of_Living" value="<?php echo escape($user->dataDetails()->StreetOfLiving); ?>" class="form-control">
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="No_House_Of_Living">Number house of living</span>
+                            <span class="input-group-text field-size" id="No_House_Of_Living">Number house</span>
                         </div>
                         <input type="text" name="No_House_Of_Living" id="No_House_Of_Living" value="<?php echo escape($user->dataDetails()->NoHouseOfLiving); ?>" class="form-control">
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="No_Flat_Of_Living">Number flat of living</span>
+                            <span class="input-group-text field-size" id="No_Flat_Of_Living">Number flat</span>
                         </div>
                         <input type="text" name="No_Flat_Of_Living" id="No_Flat_Of_Living" value="<?php echo escape($user->dataDetails()->NoFlatOfLiving); ?>" class="form-control">
                     </div>
@@ -379,7 +383,7 @@ if(Input::exists()) {
 
                 <!-- Data correspondence -->
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
                             <span class="input-group-text field-size" id="City_Of_Correspondence">Correspondence data</span>
                         </div>
@@ -390,40 +394,42 @@ if(Input::exists()) {
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="City_Of_Correspondence">City of correspondence</span>
+                            <span class="input-group-text field-size" id="City_Of_Correspondence">City</span>
                         </div>
                         <input type="text" name="City_Of_Correspondence" id="City_Of_Correspondence" value="<?php echo escape($user->dataDetails()->CityOfCorrespondence); ?>" class="form-control">
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="Street_Of_Correspondence">Street of correspondence</span>
+                            <span class="input-group-text field-size" id="Street_Of_Correspondence">Street</span>
                         </div>
                         <input type="text" name="Street_Of_Correspondence" id="Street_Of_Correspondence" value="<?php echo escape($user->dataDetails()->StreetOfCorrespondence); ?>" class="form-control">
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="No_House_Of_Correspondence">Number house of correspondence</span>
+                            <span class="input-group-text field-size" id="No_House_Of_Correspondence">Number house</span>
                         </div>
                         <input type="text" name="No_House_Of_Correspondence" id="No_House_Of_Correspondence" value="<?php echo escape($user->dataDetails()->NoHouseOfCorrespondence); ?>" class="form-control">
                     </div>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="input-group col-lg-8">
+                    <div class="input-group col-lg-7">
                         <div class="input-group-prepend">
-                            <span class="input-group-text field-size" id="NoFlat_Of_Correspondence">Number flat of correspondence</span>
+                            <span class="input-group-text field-size" id="NoFlat_Of_Correspondence">Number flat</span>
                         </div>
                         <input type="text" name="NoFlat_Of_Correspondence" id="NoFlat_Of_Correspondence" value="<?php echo escape($user->dataDetails()->NoFlatOfCorrespondence); ?>" class="form-control">
                     </div>
                 </div>
 
-                <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-                <input type="submit" value="Zmień" class="btn btn-primary float-right mr-5 mb-5">
+                <div class="form-row">
+                    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+                    <input type="submit" value="Zmień" class="btn btn-primary mt-3 mb-5 set_center">
+                </div>
 
             </form>
 

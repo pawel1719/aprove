@@ -20,7 +20,7 @@ require_once 'core/init.php';
 <BODY class="bg-secondary">
 
     <div class="container">
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-1 col-md-2 col-lg-1 col-xl-1"></div>
             <div class="col-10 col-md-8 col-lg-10 col-xl-10">
 

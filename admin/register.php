@@ -98,7 +98,8 @@ require_once '../core/init.php';
                             </div>
                             <input type="text" class="form-control" id="email" name="email" value="<?php echo escape(Input::get('email')); ?>" placeholder="Podaj adres email...">
                         </div>
-                    </div>                </div>
+                    </div>
+                </div>
                 <div class="form-group form-row">
                     <div class="col-lg-6">
                         <div class="input-group">

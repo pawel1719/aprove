@@ -26,9 +26,9 @@ require_once 'core/init.php';
 <BODY class="bg-secondary">
 
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-1 col-md-3 col-lg-3"></div>
-        <div class="col-10 col-md-6 col-lg-6">
+    <div class="row mt-2">
+        <div class="col-1 col-md-3 col-lg-1"></div>
+        <div class="col-10 col-md-6 col-lg-10">
             <!-- App menu -->
             <?php include_once Config::get('includes/main_menu'); ?>
 
@@ -97,7 +97,7 @@ require_once 'core/init.php';
 ?>
 
 
-            <form action="" method="post" class="text-light mt-5 col-lg-8 set_center">
+            <form action="" method="post" class="text-light mt-5 col-lg-5 set_center">
 
                 <div class="form-group">
                     <label for="password_current">Current password</label>
@@ -118,7 +118,7 @@ require_once 'core/init.php';
             </form>
 
         </div>
-        <div class="col-1 col-md-3 col-lg-3"></div>
+        <div class="col-1 col-md-3 col-lg-1"></div>
     </div>
 </div>
 
