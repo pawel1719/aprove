@@ -53,8 +53,11 @@ class User {
         }
 
         if(!$this->_db->update('users', $id, $fields)) {
+            Logs::addError('There was a problem updating!');
             throw new Exception('There was a problem updating!');
         }
+
+        return true;
     }
 
     public function updateDetails($fields = array(), $id = null) {
@@ -65,6 +68,8 @@ class User {
         if(!$this->_db->update('users_data', $id, $fields)) {
             throw new Exception('There was a problem updating details!');
         }
+
+        return true;
     }
 
     public function passwordHistory($password, $created, $updated, $id = null) {

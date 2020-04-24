@@ -30,6 +30,8 @@ if(!$user->isLogged()) {
         <div class="col-10 col-md-8 col-lg-8">
 
             <h2>Welcome in All users!</h2>
+            <hr/>
+            <br>
 
             <?php
 
