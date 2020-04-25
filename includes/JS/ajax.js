@@ -1,5 +1,5 @@
 const form = document.querySelector('.container form');
-
+const spinner = document.querySelector(".spinner_container");
 
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -17,12 +17,6 @@ function manage_agree(form_input) {
     // console.log('---------------------------------------');
     // console.log('token=' + token + '&agreement=' + agreement + '&name=' + name + '&user_id=' + user_id + '&status=' + status);
 
-    //headers to send
-    const myHeader = new Headers();
-    myHeader.append("Content-Type", "text/plain");
-    myHeader.append("Accept", "*/*");
-    // console.log(myHeader);
-
     //data to send
     const myData = new FormData();
     myData.append("token", token);
@@ -35,7 +29,6 @@ function manage_agree(form_input) {
 
     fetch('../includes/JS/Request/Request.php?case=1', {
             method: 'POST',
-            // headers: myHeader,
             body: myData
         })
         .then(resp => resp.text())
@@ -58,6 +51,7 @@ function manage_agree(form_input) {
 
 form.addEventListener("change", function (e) {
     if (e.target.type === "checkbox") {
+        spinner.classList.add("spinner_container-active");
         if (e.target.name === "select_all") {
             if (e.target.checked === true) {
                 changeAllValues(true);
@@ -75,17 +69,22 @@ form.addEventListener("change", function (e) {
                 manage_agree(e.target);
             }
         }
-
+        setTimeout(()=>{
+            spinner.classList.remove("spinner_container-active");
+        },2000);
     }
-
 })
 
 function changeAllValues(value) {
     const inputs = document.querySelectorAll(".container form input[type=checkbox]");
     for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].checked != value) {
+            spinner.classList.add("spinner_container-active");
             inputs[i].checked = value;
             manage_agree(inputs[i]);
+            setTimeout(()=>{
+                spinner.classList.remove("spinner_container-active");
+            },2000);
         }
         if (value == true && inputs[i].name != "select_all") {
             inputs[i].parentElement.parentElement.classList.remove('table-danger');

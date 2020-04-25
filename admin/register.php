@@ -65,6 +65,12 @@ require_once '../core/init.php';
                     'required' => true,
                     'min' => 2,
                     'max' => 35
+                ),
+                'plec' => array(
+                    'required' => true
+                ),
+                'grupa' => array(
+                    'required' => true
                 )
             ));
 
@@ -81,7 +87,7 @@ require_once '../core/init.php';
                         'IDHash' => md5(Input::get('Email')),
                         'Password' => Hash::make(Input::get('password'), $salt),
                         'Salt' => $salt,
-                        'Permission' => 3,
+                        'Permission' => Input::get('grupa'),
                         'PasswordCreadtedAt' => date('Y-m-d H:i:s'),
                         'CreatedAt' => date('Y-m-d H:i:s'),
                         'UpdatedAt' => date('Y-m-d H:i:s'),
@@ -98,6 +104,7 @@ require_once '../core/init.php';
                         'LastNameUpdatedAt'     => date('Y-m-d H:i:s'),
                         'DateOfBirth'           => Input::get('birth'),
                         'DateOfBirthUpdatedAt'  => date('Y-m-d H:i:s'),
+                        'Gender'                => (Input::get('plec') == 1 ? 1 : 0),
                         'PESEL'                 => Input::get('pesel'),
                         'PESELCreatedAt'        => date('Y-m-d H:i:s'),
                         'PESELUpdatedAt'        => date('Y-m-d H:i:s'),
@@ -188,6 +195,40 @@ require_once '../core/init.php';
                                 <div class="input-group-text">*Nazwisko</div>
                             </div>
                             <input type="text" class="form-control" id="surname" name="surname" value="<?php echo escape(Input::get('surname')); ?>" placeholder="Podaj imię...">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">*Płeć</div>
+                            </div>
+                            <select class="form-control" id="plec" name="plec" required>
+                                <option value="">Wybierz</option>
+                                <option value="2">Kobieta</option>
+                                <option value="1">Mężczyzna</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">*Grupa</div>
+                            </div>
+                            <select class="form-control"  id="grupa" name="grupa">
+                                <?php
+
+                                    $db = DBB::getInstance();
+                                    $options = $db->query('SELECT ID, Name FROM permission')->results();
+
+                                    // option for select
+                                    foreach($options as $option) {
+                                        echo '<option value="'. (($option->ID == '3') ? $option->ID.'" selected>' : $option->ID.'">') . $option->Name .'</option>';
+                                    }
+
+                                ?>
+                            </select>
                         </div>
                     </div>
                 </div>

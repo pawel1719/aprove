@@ -32,8 +32,32 @@ require_once '../core/init.php';
 
     <?php include_once Config::get('includes/second_index'); ?>
 
+    <style>
+        .spinner_container{
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255,255,255,0.7);
+            position: absolute;
+            z-index: 100;
+            display: none;
+        }
+        .spinner_container-active{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            pointer-events: none;
+        }
+    </style>
+
 </HEAD>
 <BODY class="bg-secondary">
+
+    <div class="spinner_container">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 
 <div class="container">
     <div class="row mt-5">
@@ -46,9 +70,6 @@ require_once '../core/init.php';
 
             <h2>Managment users to <?php echo $approval->Title .' v'. $approval->Version; ?>.0!</h2>
             <br>
-            <div class="spinner-border" role="status" style="display: none;">
-                <span class="sr-only">Loading...</span>
-            </div>
             <br>
             <?php
 
