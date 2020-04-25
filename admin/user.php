@@ -21,6 +21,16 @@ require_once '../core/init.php';
 
     <?php include_once Config::get('includes/second_index'); ?>
 
+    <style>
+        .message_box{
+            display: none;
+        }
+
+        .message_box-active{
+            display: block;
+        }
+    </style>
+
 </HEAD>
 <BODY class="bg-secondary">
 
@@ -34,9 +44,10 @@ require_once '../core/init.php';
         <div class="col-10 col-md-8 col-lg-8">
             <h2>Managment user!</h2>
             <hr/>
+            <div class="alert alert-success message_box"></div>
             <br>
 
-            <div class="table-responsive">
+            <div id="element_id" class="table-responsive">
                 <form action="" method="post">
                     <table class="table table-dark table-striped table-hover">
                         <tbody class="table-sm">
@@ -54,7 +65,7 @@ require_once '../core/init.php';
                             echo '<th scope="row">Nazwisko</th><td><input type="text" name="LastName" value="'. $user_details->LastName .'"></td>';
                             echo "</tr>\n<tr>";
                             echo '<th scope="row">Hasło utworzono</th><td>'. $single_user->PasswordCreadtedAt .'</td>';
-                            echo '<th scope="row">Permission</th><td><select name="permission" id="'. $single_user->Permission .'"><!-- options --></select></td>';
+                            echo '<th scope="row">Permission</th><td><select name="Permission" id="'. $single_user->Permission .'"><!-- options --></select></td>';
                             echo "</tr>\n<tr>";
                             echo '<th scope="row">Ostatnie logowanie</th><td>'. $single_user->LastLoginAt .'</td>';
                             echo '<th scope="row">Utworzono</th><td>'. $single_user->CreatedAt .'</td>';

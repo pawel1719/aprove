@@ -1,7 +1,9 @@
 const form = document.querySelector('.container form');
 const user = document.querySelector('.container form input[name=user]').value;
 const token = document.querySelector('.container form input[name=token]').value;
-const perm = document.querySelector('.container form select[name=permission');
+const perm = document.querySelector('.container form select[name=Permission');
+var element = document.querySelector(".container .message_box");
+var page = window;
 
 
 document.addEventListener('DOMContentLoaded', function (e) {
@@ -9,8 +11,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
     show_permission();
 })
 form.addEventListener("change", function (e) {
-    update_user(e.target);
-    console.log(e.target.name +" - "+ e.target.value);
+    if (confirm("Czy na pewno chcesz edytować?")) {
+        update_user(e.target);
+        // console.log(e.target.name +" - "+ e.target.value);
+        console.log("You pressed OK!");
+        show_message('Dane zostały zaktualizowane!');
+    } else {
+        location.reload();
+        console.log("You pressed Cancel!");
+    }
+
 })
 
 
@@ -79,6 +89,15 @@ function update_user(data) {
                 console.log("Error connection " + error.status);
             }
         });
+}
+
+function show_message(content){
+    window.parent.scroll(-10, -10);
+    element.innerHTML = content;
+    element.classList.add("message_box-active");
+    setTimeout(()=>{
+        element.classList.remove("message_box-active");
+    },3000);
 }
 
 function sleep(milliseconds) {

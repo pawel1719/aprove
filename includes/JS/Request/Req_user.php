@@ -25,11 +25,21 @@ if(Input::exists()) {
 
             break;
             case 2:
-                $fields = array(
-                    Input::get('field') => Input::get('value'),
-                    Input::get('field') .'UpdatedAt' => date('Y-m-d H:i:s')
-                );
-                $update = $user->updateDetails($fields, Input::get('user_id'));
+                if(Input::get('field') == 'Permission' || Input::get('field') == 'IsBlocked')
+                {
+                    // update data in table users
+                    $fields = array(
+                        Input::get('field') => Input::get('value')
+                    );
+                    $update = $user->update($fields, Input::get('user_id'));
+                }else {
+                    // update data in table users_data
+                    $fields = array(
+                        Input::get('field') => Input::get('value'),
+                        Input::get('field') .'UpdatedAt' => date('Y-m-d H:i:s')
+                    );
+                    $update = $user->updateDetails($fields, Input::get('user_id'));
+                }
 
                 if(!$update) {
                     echo 'Error: Cant update data!';
