@@ -31,31 +31,54 @@ require_once '../core/init.php';
 
 <?php
 
+    if(Session::exists('error')) {
+        echo '<div class="alert alert-danger" role="alert">'. Session::flash('error') .'</div>';
+    }elseif(Session::exists('success')) {
+        echo '<div class="alert alert-success" role="alert">'.Session::flash('success') .'</div>';
+    }
+
     if(Input::exists()) {
         if(Token::check(Input::get('token'))) {
 
             $valitation = new Validation();
             $valitation->check($_POST, array(
-                'email' => array(
+                'Email' => array(
                     'required' => true,
                     'min' => 5,
                     'max' => 20,
+                    'unique' => 'users'
                 ),
                 'password' => array(
-                    'required' => true
+                    'required' => true,
+                    'min' => 6,
                 ),
                 'password_again' => array(
-                    'required' => true
+                    'required' => true,
+                    'matches' => 'password'
+                ),
+                'name' => array(
+                    'required' => true,
+                    'min' => 3,
+                    'max' => 35
+                ),
+                'surname' => array(
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 35
                 )
             ));
 
             if ($valitation->passed()) {
+
                 $user = new User();
+                $db = DBB::getInstance();
+
                 try {
 
                     $salt = Hash::slat();
                     $user->create(array(
-                        'Email' => Input::get('email'),
+                        'Email' => Input::get('Email'),
+                        'IDHash' => md5(Input::get('Email')),
                         'Password' => Hash::make(Input::get('password'), $salt),
                         'Salt' => $salt,
                         'Permission' => 3,
@@ -65,12 +88,44 @@ require_once '../core/init.php';
                         'IsBlocked' => 0
                     ));
 
-                    Session::flash('registed', 'You are registed!<br/>');
-                    Redirect::to('index.php');
+                    $id_account = $db->query("SELECT `ID` FROM `users` WHERE Email = '". Input::get('Email') ."'")->firstResult()->ID;
+
+                    $account_details = $db->insert('users_data', array(
+                        'IDUsers'               => (int)$id_account,
+                        'FirstName'             => Input::get('name'),
+                        'FirstNameUpdatedAt'    => date('Y-m-d H:i:s'),
+                        'LastName'              => Input::get('surname'),
+                        'LastNameUpdatedAt'     => date('Y-m-d H:i:s'),
+                        'DateOfBirth'           => Input::get('birth'),
+                        'DateOfBirthUpdatedAt'  => date('Y-m-d H:i:s'),
+                        'PESEL'                 => Input::get('pesel'),
+                        'PESELCreatedAt'        => date('Y-m-d H:i:s'),
+                        'PESELUpdatedAt'        => date('Y-m-d H:i:s'),
+                        'IdentificationCard'            => Input::get('id_card'),
+                        'IdentificationCardCreatedAt'   => date('Y-m-d H:i:s'),
+                        'IdentificationCardUpdatedAt'   => date('Y-m-d H:i:s'),
+                        'ExpirationDateNoPersonalCard'              => Input::get('date_expired'),
+                        'ExpirationDateNoPersonalCardCreatedAt'     => date('Y-m-d H:i:s'),
+                        'ExpirationDateNoPersonalCardUpdatedAt'     => date('Y-m-d H:i:s'),
+                        'CompanyName'           => Input::get('company'),
+                        'CompanyNameCreatedAt'  => date('Y-m-d H:i:s'),
+                        'CompanyNameUpdatedAt'  => date('Y-m-d H:i:s'),
+                        'WorkPosition'          => Input::get('work_position'),
+                        'WorkPositionCreatedAt' => date('Y-m-d H:i:s'),
+                        'WorkPositionUpdatedAt' => date('Y-m-d H:i:s'),
+                        'DateCreatedRecord'     => date('Y-m-d H:i:s'),
+                    ));
 
                 } catch(Exception $e) {
-                    die($e->getMessage());
+                    Logs::addError('Cant create new user! Message: '. $e->getMessage() .' File '. $e->getFile() .' Line '. $e->getLine());
+                    Session::flash('error', 'Błąd - nie można utworzyć konta!');
+                    Redirect::to('register.php');
                 }
+
+                // success for creating
+                Session::flash('success', 'Użytkownik został utworzony!');
+                Redirect::to('register.php');
+
             } else {
                 // ERRORS FROM VALIDATION
                 echo '<div class="alert alert-danger" role="alert">';
@@ -94,9 +149,9 @@ require_once '../core/init.php';
                     <div class="">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">Email</div>
+                                <div class="input-group-text">*Email</div>
                             </div>
-                            <input type="text" class="form-control" id="email" name="email" value="<?php echo escape(Input::get('email')); ?>" placeholder="Podaj adres email...">
+                            <input type="text" class="form-control" id="Email" name="Email" value="<?php echo escape(Input::get('Email')); ?>" placeholder="Podaj adres email...">
                         </div>
                     </div>
                 </div>
@@ -104,7 +159,7 @@ require_once '../core/init.php';
                     <div class="col-lg-6">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">Hasło</div>
+                                <div class="input-group-text">*Hasło</div>
                             </div>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Podaj hasło...">
                         </div>
@@ -112,7 +167,7 @@ require_once '../core/init.php';
                     <div class="col-lg-6">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">Powtórz hasło</div>
+                                <div class="input-group-text">*Powtórz hasło</div>
                             </div>
                             <input type="password" class="form-control" id="password_again" name="password_again" placeholder="Powtórz hasło...">
                         </div>
@@ -122,7 +177,7 @@ require_once '../core/init.php';
                     <div class="col-lg-6">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">Imię</div>
+                                <div class="input-group-text">*Imię</div>
                             </div>
                             <input type="text" class="form-control" id="name" name="name" value="<?php echo escape(Input::get('name')); ?>" placeholder="Podaj imię...">
                         </div>
@@ -130,7 +185,7 @@ require_once '../core/init.php';
                     <div class="col-lg-6">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">Nazwisko</div>
+                                <div class="input-group-text">*Nazwisko</div>
                             </div>
                             <input type="text" class="form-control" id="surname" name="surname" value="<?php echo escape(Input::get('surname')); ?>" placeholder="Podaj imię...">
                         </div>
