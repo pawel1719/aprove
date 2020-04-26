@@ -15,7 +15,7 @@ require_once '../core/init.php';
     }
 
     if(!Input::get('id')) {
-        Session::flash('approvalmanag', 'Something went wrong!');
+        Session::flash('approvalmanag', 'Upss.. coś poszło nie tak!');
         Logs::addError("Incorrect address! Wrong ID.");
         Redirect::to('approvalsmanag.php');
     }
@@ -24,7 +24,7 @@ require_once '../core/init.php';
     $approval = $approvals->getApproval(array('AgreementGuid', '=', Input::get('id')));
 
     if(!$approval) {
-        Session::flash('approvalmanag', 'Something went wrong!');
+        Session::flash('approvalmanag', 'Ups.. coś poszło nie tak!');
         Logs::addError("Incorrect address! Agreement dont exists.");
         Redirect::to('approvalsmanag.php');
     }
@@ -77,7 +77,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2 style="margin-left: auto; margin-right: auto;">Zarządzaj użytkownikami do<br><u><?php echo $approval->Title .' v'. $approval->Version; ?>.0!</u></h2>
+            <h2 class="text-warning" style="margin-left: auto; margin-right: auto;">Zarządzaj użytkownikami do<br><u><?php echo $approval->Title .' v'. $approval->Version; ?>.0!</u></h2>
             <hr>
             <br>
 
@@ -88,12 +88,9 @@ require_once '../core/init.php';
                 }
 
             ?>
-
-
             <div class="table-responsive" id="table_users">
 
                 <form action="" method="post" name="managment_users">
-
                     <table class="table table-light table-striped table-hover">
                         <thead class="thead-dark table-sm">
                         <tr>

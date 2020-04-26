@@ -15,7 +15,6 @@ require_once 'core/init.php';
     }
 
 ?>
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -46,7 +45,6 @@ require_once 'core/init.php';
 
 </HEAD>
 <BODY class="bg-secondary">
-
 <div class="container">
     <div class="row mt-2">
         <div class="col-1 col-md-3 col-lg-1"></div>
@@ -172,7 +170,9 @@ if(Input::exists()) {
                 Redirect::to('update.php');
 
             } catch(Exception $e) {
-                die($e->getMessage());
+                Logs::addError('Cant update data detail user. Message '. $e->getMessage() .' File '. $e->getFile() .' Line ', $e->getLine());
+                echo 'Nie udało sie zaktualizować danych!';
+                die();
             }
 
         } else {
@@ -184,6 +184,7 @@ if(Input::exists()) {
             }
 
             echo '</div>';
+            Logs::addWarning('Incorrect data to update details user.');
         }
     }
 }
@@ -439,11 +440,9 @@ if(Input::exists()) {
 
             </form>
 
-
         </div>
         <div class="col-1 col-md-3 col-lg-1"></div>
     </div>
 </div>
-
 </BODY>
 </HTML>

@@ -40,7 +40,6 @@ require_once 'core/init.php';
     $body = $approval_data[0]->Content;
 
 ?>
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -49,7 +48,6 @@ require_once 'core/init.php';
 
 </HEAD>
 <BODY class="bg-secondary">
-
 <div class="container">
     <div class="row mt-5">
         <div class="col-1 col-md-2 col-lg-2">
@@ -118,6 +116,7 @@ require_once 'core/init.php';
                             unset($address, $name, $subject, $body);
 
                             Session::flash('agreement_accept', 'Twoja decyzja została zapisana!');
+                            Logs::addInformation('Save answer user!');
 
                             if($user->isLogged()) {
                                 Redirect::to('home.php');
@@ -199,6 +198,5 @@ require_once 'core/init.php';
         <div class="col-1 col-md-2 col-lg-2"></div>
     </div>
 </div>
-
 </BODY>
 </HTML>

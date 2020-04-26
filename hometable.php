@@ -14,7 +14,6 @@ require_once 'core/init.php';
     }
 
 ?>
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -31,7 +30,6 @@ require_once 'core/init.php';
 
                 <!-- App menu -->
                 <?php include_once Config::get('includes/main_menu'); ?>
-
 
                 <div class="table-responsive">
                     <table class="table table-light table-striped table-hover">
@@ -50,9 +48,9 @@ require_once 'core/init.php';
 
                     if(Session::exists('agreement_accept')) {
                         echo '<div class="alert alert-success" role="alert">'. Session::flash('agreement_accept') .'</div>';
+                        Logs::addInformation('Approval accepted.');
                     }
-//                    echo $user->getUserGroup() . '<br/>';
-//                    echo $user->hasPermission('admin');
+
                     $approval = new Approval();
                     $approval_data = $approval->userApproval('WHERE a.IDUsers = '. $user->data()->ID .' ORDER BY a.ID DESC');
                     $no = 1; //counter to table
@@ -76,6 +74,5 @@ require_once 'core/init.php';
             <div class="col-1 col-md-2 col-lg-1 col-xl-1"></div>
         </div>
     </div>
-
 </BODY>
 </HTML>

@@ -9,9 +9,9 @@ require_once '../core/init.php';
     }
 
     if(!$logged->hasPermission('admin_add_users', 'write')) {
-        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_add_users/write');
+        Logs::addError('User '. $logged->data()->ID .' dont have permission to this page! Permission admin_add_users/write');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
 ?>
@@ -31,7 +31,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-        <h3>Dodaj nowego użytkownika!</h3>
+        <h3 class="text-warning">Dodaj nowego użytkownika!</h3>
         <hr/>
 
 <?php
@@ -136,6 +136,7 @@ require_once '../core/init.php';
 
                 // success for creating
                 Session::flash('success', 'Użytkownik został utworzony!');
+                Logs::addInformation('Użytkownik został utworzony!');
                 Redirect::to('register.php');
 
             } else {
@@ -302,6 +303,5 @@ require_once '../core/init.php';
         <div class="col-1 col-md-2 col-lg-2"></div>
     </div>
 </div>
-
 </BODY>
 </HTML>

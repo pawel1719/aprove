@@ -50,11 +50,12 @@ if(Input::exists()) {
                 }
 
                 if(!$update) {
-                    echo 'Error: Cant update data!';
-                    echo var_dump($fields);
+                    echo 'Błąd podczas aktualizacji danych!';
+                    // echo var_dump($fields);
                     Logs::addError('Cant update informaton users. Field '. Input::get('field') .' value '. Input::get('value'));
                 } else {
-                    echo 'Success: Data updated!';
+                    echo 'Dane zosatły zaktualizowane!';
+                    Logs::addInformation('Success - data was updated.');
                 }
             break;
             default:
@@ -72,5 +73,4 @@ if(Input::exists()) {
     // error for empty $_POST or $_GET
     echo 'Error: input variable dont exists!';
     Logs::addError('Input variable dont exists!');
-
 }

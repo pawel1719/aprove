@@ -33,7 +33,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Wyślij maila!</h2>
+            <h2 class="text-warning">Wyślij maila!</h2>
             <hr>
             <br>
 
@@ -63,6 +63,7 @@ require_once '../core/init.php';
                        <HEAD></HEAD>
                        <BODY>
                             <p>' . nl2br(Input::get('mail_body')) . '</p>
+                            <br>
                             <p>Best wishes<br/>Aproval app!<br/>Created by Paweł Szóstkiewicz</p>
                        </BODY>
                        </HTML>
@@ -80,6 +81,7 @@ require_once '../core/init.php';
 
                         Input::destroy('mail_to,subject,mail_body');
                         Session::flash('success', 'Wiadomość wysłana!');
+                        Logs::addInformation('Wiadomość została wysłana.');
                         Redirect::to('sendmail.php');
 
                     } else {
@@ -101,20 +103,20 @@ require_once '../core/init.php';
             <form action="" method="post" class="text-light mt-5">
 
                 <div class="form-group">
-                    <label for="mail_to">To:</label>
+                    <label for="mail_to">Do:</label>
                     <input type="email" name="mail_to" id="mail_to" class="form-control" value="<?php echo escape(Input::get('mail_to')); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="subject">Subject</label>
+                    <label for="subject">Temat</label>
                     <input type="text" name="subject" id="subject" class="form-control" value="<?php echo escape(Input::get('subject')); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="mail_body">Body</label>
+                    <label for="mail_body">Treść</label>
                     <textarea name="mail_body" id="mail_body" class="form-control" rows="7" placeholder="Wprowadź tekst"><?php echo escape(Input::get('mail_body')); ?></textarea>
                 </div>
 
                 <input type="hidden" name="token" id="token" value="<?php echo Token::generate(); ?>">
-                <input type="submit" value="Send" class="btn btn-primary float-right">
+                <input type="submit" value="Wyślij" class="btn btn-primary float-right">
 
             </form>
 

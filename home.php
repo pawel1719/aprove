@@ -57,7 +57,9 @@ require_once 'core/init.php';
 
                     if($message != false) {
                         echo '<div class="card text-white bg-danger mb-3" style="min-width: 15rem; max-width: 27rem; margin-right: auto; margin-left: auto;">
-                                <div class="card-header">Ważne!!!</div>
+                                <div class="card-header">Ważne!!!
+                                    <span class="badge badge-dark badge-pill float-right">'. count($message) .'</span>
+                                </div>
                                 <div class="card-body text-white">
                                     <h6 class="card-title">Użytkowniku <b>'. $user->dataDetails()->FirstName .' '. $user->dataDetails()->LastName .'</b></h6>
                                     <p class="card-text">Udziel odpowiedzi na <u>wszystkie</u> regulaminy i zgody!<br>Liczba nieudzielonych odpowiedzi <b>'. count($message) .'</b> !!!</p>
@@ -71,6 +73,5 @@ require_once 'core/init.php';
             <div class="col-1 col-md-2 col-lg-1 col-xl-1"></div>
         </div>
     </div>
-
 </BODY>
 </HTML>

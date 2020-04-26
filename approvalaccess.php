@@ -72,7 +72,7 @@ require_once 'core/init.php';
                         } else {
                             // incorrect login
                             Logs::addError('Incorrect login '. Input::get('login'));
-                            Session::flash('error', 'Sorry, incorrect login or password!');
+                            Session::flash('error', 'Niestety, login lub hasło jest niepoprawne!');
                             Redirect::to('approvalaccess.php?access='. Input::get('access'));
                         }
                     } else {
@@ -96,16 +96,16 @@ require_once 'core/init.php';
             <form action="" method="post" class="text-light mt-5">
 
                 <div class="form-group">
-                    <label for="login">Username</label>
+                    <label for="login">Login</label>
                     <input type="text" name="login" id="login" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Hasło</label>
                     <input type="password" name="password" id="password" class="form-control">
                 </div>
 
                 <input type="hidden" name="token" id="'token" value="<?php echo Token::generate(); ?>">
-                <input type="submit" value="Log in" class="btn btn-primary float-right">
+                <input type="submit" value="Zaloguj" class="btn btn-primary float-right">
 
             </form>
 
@@ -113,6 +113,5 @@ require_once 'core/init.php';
         <div class="col-1 col-md-3 col-lg-4"></div>
     </div>
 </div>
-
 </BODY>
 </HTML>

@@ -14,8 +14,6 @@ require_once 'core/init.php';
     }
 
 ?>
-
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -30,7 +28,6 @@ require_once 'core/init.php';
 
 </HEAD>
 <BODY class="bg-secondary">
-
 <div class="container">
     <div class="row mt-2">
         <div class="col-1 col-md-3 col-lg-1"></div>
@@ -63,7 +60,8 @@ require_once 'core/init.php';
             if($validate->passed()) {
 
                 if(Hash::make(Input::get('password_current'), $user->data()->Salt) !== $user->data()->Password) {
-                    echo '<div class="alert alert-danger" role="alert">Your current password is wrong!</div>';
+                    echo '<div class="alert alert-danger" role="alert">Aktualne hasło jest nie poprawne!</div>';
+                    Logs::addWarning('Current password is wrong.');
                 } else {
                     if($user->passwordRepeated(Input::get('password_new'), Config::get('user/can_not_use_last_passwords'))) {
 
@@ -80,10 +78,12 @@ require_once 'core/init.php';
                             date('Y-m-d H:i:s')
                         );
 
-                        echo '<div class="alert alert-success" role="alert">Password changed!</div>';
+                        echo '<div class="alert alert-success" role="alert">Hasło zmienione!</div>';
+                        Logs::addInformation('Password was changed.');
 
                     } else {
-                        echo '<div class="alert alert-danger" role="alert">Password must be diffrent than last three passwords!</div>';
+                        echo '<div class="alert alert-danger" role="alert">Hasło musi się różnić od trzech ostanich!</div>';
+                        Logs::addWarning('Password have to be different than last three.');
                     }
                 }
 
@@ -96,13 +96,12 @@ require_once 'core/init.php';
                 }
 
                 echo '</div>';
+                Logs::addWarning('Incorrect passwords.');
             }
         }
     }
 
 ?>
-
-
             <form action="" method="post" class="text-light mt-5 col-lg-5 set_center">
 
                 <div class="form-group">
@@ -119,7 +118,7 @@ require_once 'core/init.php';
                 </div>
 
                 <input type="hidden" name="token" id="token" value="<?php echo Token::generate(); ?>">
-                <input type="submit" value="Change" class="btn btn-primary float-right">
+                <input type="submit" value="Zmień" class="btn btn-primary float-right">
 
             </form>
 
@@ -127,6 +126,5 @@ require_once 'core/init.php';
         <div class="col-1 col-md-3 col-lg-1"></div>
     </div>
 </div>
-
 </BODY>
 </HTML>

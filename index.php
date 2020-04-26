@@ -46,7 +46,7 @@ require_once 'core/init.php';
                $user = new User();
                $login = $user->login(Input::get('email'), Input::get('password'));
 
-               if ($login) {
+               if($login) {
                    Redirect::to('home.php');
                }
 
@@ -79,6 +79,7 @@ require_once 'core/init.php';
                }
 
                echo '</div>';
+               Logs::addWarning('Incorect login or password.');
            }
 
        }
@@ -86,19 +87,20 @@ require_once 'core/init.php';
 
 ?>
 
+
                 <form action="" method="post" class="text-light mt-5">
 
                     <div class="form-group">
-                        <label for="email">Username</label>
-                        <input type="text" name="email" id="email" class="form-control">
+                        <label for="email">Login</label>
+                        <input type="email" name="email" id="email" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
+                        <label for="password">Hasło</label>
                         <input type="password" name="password" id="password" class="form-control">
                     </div>
 
                     <input type="hidden" name="token" id="'token" value="<?php echo Token::generate(); ?>">
-                    <input type="submit" value="Log in" class="btn btn-primary float-right">
+                    <input type="submit" value="Zaloguj" class="btn btn-primary float-right">
 
                 </form>
 

@@ -43,7 +43,8 @@ if(!$user->isLogged()) {
                                 $db->insert('agreements', $users_agreement_add);
                                 sleep(0.1);
 
-                                echo 'Success adding user ' . Input::get('user_id') . '!';
+                                echo 'Użytkownik został dodany ' . Input::get('user_id') . '!';
+                                Logs::addInformation('User was added.');
                             } catch (Exception $e) {
                                 Logs::addError("Cant add new agreemet. Message: " . $e->getMessage() . ' Line: ' . $e->getLine() . ' File: ' . $e->getFile() . ' Array:' . strval(var_dump($users_agreement_add)));
                                 echo('#2321: Error: ' . $e->getMessage());
@@ -76,7 +77,8 @@ if(!$user->isLogged()) {
                                 $mail = new Mail(true);
                                 $mail->createMessage($user_to_agree->Email, $NAME_TO, $SUBJECT, $HTML_MESSAGE);
 
-                                echo 'Success sendding mail to user ' . Input::get('user_id') . '!';
+                                echo 'Mail został wysłany ' . Input::get('user_id') . '!';
+                                Logs::addInformation("Mail was sended.");
                                 unset($NAME_TO, $SUBJECT, $HTML_MESSAGE);
 
                             } catch (Exception $e) {
@@ -92,7 +94,8 @@ if(!$user->isLogged()) {
                                     (int)Input::get('user_id'),
                                     (int)Input::get('agreement')
                                 ));
-                                echo 'Success deleting ' . Input::get('user_id') . '!';
+                                echo 'Usunięto ' . Input::get('user_id') . '!';
+                                Logs::addInformation('Data was deleting!');
                             } catch (Exception $e) {
                                 Logs::addError("Cant delete agreemet. Message: " . $e->getMessage() . ' Line: ' . $e->getLine() . ' File: ' . $e->getFile() . ' Variable:' . Input::get('user_id') . ' ' . Input::get('agreement'));
                                 echo('#2322: Error: ' . $e->getMessage());

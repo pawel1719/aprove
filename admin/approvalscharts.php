@@ -52,8 +52,6 @@ require_once '../core/init.php';
 
         }
 
-        // window.addEventListener("load", () => { wykres();});
-        // window.onload = (event) => { wykres(); };
 
         <?php
 
@@ -109,13 +107,12 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Wykresy dla zgód!</h2>
+            <h2 class="text-warning">Wykresy dla zgód!</h2>
 
             <?php
                 echo $div_html;
             ?>
-<!--            <div id="piechart2" style="width: 100%; height: 350px;"></div>-->
-<!--            <div id="piechart" style="width: 100%; height: 350px;"></div>-->
+
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
         </div>

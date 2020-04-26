@@ -33,7 +33,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Witaj w panelu administratora!</h2>
+            <h2 class="text-warning">Witaj w panelu administratora!</h2>
 
         </div>
         <div class="col-1 col-md-2 col-lg-2"></div>

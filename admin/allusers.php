@@ -33,7 +33,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Wszyscy użytkownicy!</h2>
+            <h2 class="text-warning">Wszyscy użytkownicy!</h2>
             <hr/>
             <br>
 
@@ -49,13 +49,13 @@ require_once '../core/init.php';
                 <table class="table table-light table-striped table-hover">
                     <thead class="thead-dark table-sm">
                     <tr>
-                        <th scope="col">Nr</th>
-                        <th scope="col">Login</th>
-                        <th scope="col">Nazwisko</th>
-                        <th scope="col">Imię</th>
-                        <th scope="col">Ostatnie logowanie</th>
-                        <th scope="col">Blokada</th>
-                        <th scope="col">Blokada do</th>
+                        <th scope="col" class="small">Nr</th>
+                        <th scope="col" class="small">Login</th>
+                        <th scope="col" class="small">Nazwisko</th>
+                        <th scope="col" class="small">Imię</th>
+                        <th scope="col" class="small">Ostatnie logowanie</th>
+                        <th scope="col" class="small">Blokada</th>
+                        <th scope="col" class="small">Blokada do</th>
                     </tr>
                     </thead>
                     <tbody class="table-sm">
@@ -81,13 +81,13 @@ require_once '../core/init.php';
                         foreach($users as $u) {
                             $no_row++;
                             echo "\n<tr>";
-                            echo '<td>'. $no_row .'</td>';
-                            echo '<td><a href="user.php?id='. $u->IDHash .'">'. $u->Email  .'</a></td>';
-                            echo '<td>' . $u->LastName  . '</td>';
-                            echo '<td>'. $u->FirstName .'</td>';
-                            echo '<td class="text-center">'. $u->LastLoginAt .'</td>';
-                            echo '<td class="text-sm-center">'. ((($u->IsBlocked) == 1) ? 'Tak' : 'Nie') .'</td>';
-                            echo '<td>'. $u->BlockedTo .'</td>';
+                            echo '<td class="small">'. $no_row .'</td>';
+                            echo '<td class="small"><a href="user.php?id='. $u->IDHash .'">'. $u->Email  .'</a></td>';
+                            echo '<td class="small">' . $u->LastName  . '</td>';
+                            echo '<td class="small">'. $u->FirstName .'</td>';
+                            echo '<td class="text-center small">'. $u->LastLoginAt .'</td>';
+                            echo '<td class="text-sm-center small">'. ((($u->IsBlocked) == 1) ? 'Tak' : 'Nie') .'</td>';
+                            echo '<td class="small">'. $u->BlockedTo .'</td>';
                             echo '</tr>';
                         }
 

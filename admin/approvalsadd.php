@@ -32,7 +32,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Dodaj nową zgodę!</h2>
+            <h2 class="text-warning">Dodaj nową zgodę!</h2>
 
             <?php
 
@@ -104,24 +104,24 @@ require_once '../core/init.php';
             <form action="" method="post" class="text-light mt-5">
 
                 <div class="form-group">
-                    <label for="title">Title</label>
+                    <label for="title">Tytuł</label>
                     <input type="text" name="title" id="title" value="<?php echo escape(Input::get('title')); ?>" autocomplete="on" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="content">Content</label>
+                    <label for="content">Treść</label>
                     <textarea name="content" id="content" class="form-control" rows="9" placeholder="Wprowadź treść zgody   "><?php echo escape(Input::get('content')); ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="start">Data start</label>
+                    <label for="start">Początek</label>
                     <input type="date" name="start" id="start" value="<?php echo escape(Input::get('start')); ?>" autocomplete="on" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="end">Date end</label>
+                    <label for="end">Koniec</label>
                     <input type="date" name="end" id="end" value="<?php echo escape(Input::get('end')); ?>" autocomplete="on" class="form-control">
                 </div>
                 <div class="form-check">
                     <input type="checkbox" name="is_active" id="is_active" class="form-check-input">
-                    <label for="is_active" class="form-check-label">Is active</label>
+                    <label for="is_active" class="form-check-label">Aktywna</label>
                 </div>
 
                 <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">

@@ -33,7 +33,7 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Zarządzanie zgodami!</h2>
+            <h2 class="text-warning">Zarządzanie zgodami!</h2>
             <br>
             <?php
 
