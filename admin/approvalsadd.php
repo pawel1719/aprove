@@ -1,16 +1,19 @@
 <?php
 require_once '../core/init.php';
 
-$user = new User();
+    $user = new User();
 
-if(!$user->isLogged()) {
-    Logs::addError("Unauthorization access!");
-    Redirect::to('../index.php');
-}
+    if(!$user->isLogged()) {
+        Logs::addError("Unauthorization access!");
+        Redirect::to('../index.php');
+    }
+    if(!$user->hasPermission('admin_add_approval', 'write')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_add_approval/write');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
+    }
 
 ?>
-
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -29,7 +32,7 @@ if(!$user->isLogged()) {
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Adding new agreements!</h2>
+            <h2>Dodaj nową zgodę!</h2>
 
             <?php
 

@@ -7,6 +7,12 @@ require_once 'core/init.php';
         Redirect::to('index.php');
     }
 
+    if(!$user->hasPermission('user_change_password', 'write')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission user_change_password/write');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
+    }
+
 ?>
 
 
@@ -100,15 +106,15 @@ require_once 'core/init.php';
             <form action="" method="post" class="text-light mt-5 col-lg-5 set_center">
 
                 <div class="form-group">
-                    <label for="password_current">Current password</label>
+                    <label for="password_current">Aktualne hasło</label>
                     <input type="password" name="password_current" id="password_current" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="password_new">New password</label>
+                    <label for="password_new">Nowe hasło</label>
                     <input type="password" name="password_new" id="password_new" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="password_new_again">New password again</label>
+                    <label for="password_new_again">Powtórz nowe hasło</label>
                     <input type="password" name="password_new_again" id="password_new_again" class="form-control">
                 </div>
 

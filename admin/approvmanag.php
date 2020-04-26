@@ -8,6 +8,12 @@
         Redirect::to('../index.php');
     }
 
+    if(!$user->hasPermission('admin_list_approval', 'read')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_list_approval/read');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
+    }
+
     if(!Input::get('approval')) {
         Session::flash('approvalmanag', 'Something went wrong!');
         Logs::addError("Incorrect address! Wrong approval");
@@ -18,9 +24,17 @@
     $approval = $approvals->getApproval(array('AgreementGuid', '=', Input::get('approval')));
 
     if(!$approval) {
+        // when dont find approval
         Session::flash('approvalmanag', 'Something went wrong!');
         Logs::addError("Incorrect address! Approval dont exist.");
         Redirect::to('approvalsmanag.php');
+    }
+
+    // permission to edit
+    if(!$user->hasPermission('admin_edit_approval', 'write')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_edit_approval/write');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
     }
 
     if(!Input::exists()) {
@@ -31,8 +45,6 @@
     }
 
 ?>
-
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -51,7 +63,7 @@
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Updating approval!</h2>
+            <h2>Zmiana zgody!</h2>
             <br>
             <br>
 

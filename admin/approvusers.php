@@ -8,6 +8,12 @@ require_once '../core/init.php';
         Redirect::to('../index.php');
     }
 
+    if(!$user->hasPermission('admin_manage_members_approval', 'read')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_manage_members_approval/read');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
+    }
+
     if(!Input::get('id')) {
         Session::flash('approvalmanag', 'Something went wrong!');
         Logs::addError("Incorrect address! Wrong ID.");
@@ -48,6 +54,9 @@ require_once '../core/init.php';
             top: 0;
             pointer-events: none;
         }
+        .spinner_container.spinner_container-active + .container{
+            pointer-events: none;
+        }
     </style>
 
 </HEAD>
@@ -68,9 +77,10 @@ require_once '../core/init.php';
         </div>
         <div class="col-10 col-md-8 col-lg-8">
 
-            <h2>Managment users to <?php echo $approval->Title .' v'. $approval->Version; ?>.0!</h2>
+            <h2 style="margin-left: auto; margin-right: auto;">Zarządzaj użytkownikami do<br><u><?php echo $approval->Title .' v'. $approval->Version; ?>.0!</u></h2>
+            <hr>
             <br>
-            <br>
+
             <?php
 
                 if(Session::exists('success')) {
@@ -78,7 +88,7 @@ require_once '../core/init.php';
                 }
 
             ?>
-            <br>
+
 
             <div class="table-responsive" id="table_users">
 
@@ -87,7 +97,14 @@ require_once '../core/init.php';
                     <table class="table table-light table-striped table-hover">
                         <thead class="thead-dark table-sm">
                         <tr>
-                            <th scope="col" class="text-center"><input type="checkbox" name="select_all">Select</th>
+                            <?php
+                                if($user->hasPermission('admin_manage_members_approval', 'write')) {
+                                    echo '<th scope="col" class="text-center"><input type="checkbox" name="select_all"> Zaznacz</th>';
+                                } else {
+                                    echo '<th scope="col" class="text-center">Dodany</th>';
+                                }
+                            ?>
+
                             <th scope="col">Lp.</th>
                             <th scope="col">Login</th>
                             <th scope="col">Imię</th>
@@ -112,7 +129,11 @@ require_once '../core/init.php';
 
                             foreach($users as $u) {
                                 echo "\n<tr>\t";
-                                echo '<td class="text-center'. (($u->IDagreementsConfiguration != NULL) ? " table-success" : "") .'"><input type="checkbox" name="'. $u->IDHash .'" value="'. $u->ID .'"'. (($u->IDagreementsConfiguration != NULL) ? " checked" : "") . (($u->AcceptAgreement != NULL) ? " disabled" : "") .'></td>';
+                                if($user->hasPermission('admin_manage_members_approval', 'write')) {
+                                    echo '<td class="text-center' . (($u->IDagreementsConfiguration != NULL) ? " table-success" : "") . '"><input type="checkbox" name="' . $u->IDHash . '" value="' . $u->ID . '"' . (($u->IDagreementsConfiguration != NULL) ? " checked" : "") . (($u->AcceptAgreement != NULL) ? " disabled" : "") . '></td>';
+                                } else {
+                                    echo '<td class="text-center' . (($u->IDagreementsConfiguration != NULL) ? " table-success" : "") . '">'. (($u->IDagreementsConfiguration != NULL) ? "Tak" : "Nie") .'</td>';
+                                }
                                 echo '<td>'.$u->ID .'</td>';
                                 echo '<td>'.$u->Email .'</td>';
                                 echo '<td>'.$u->FirstName .'</td>';

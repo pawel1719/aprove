@@ -7,6 +7,14 @@ if(!$user->isLogged()) {
     Logs::addError("Unauthorization access!");
     Redirect::to('../../../index.php');
 }
+
+// permission to edit
+if(!$user->hasPermission('admin_user_data', 'write')) {
+    Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_user_data/write');
+    Session::flash('warning', 'Nie masz uprawnień!');
+    Redirect::to('home.php');
+}
+
 if(Input::exists()) {
         // connect to db
         $db = DBB::getInstance();

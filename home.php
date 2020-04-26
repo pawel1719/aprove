@@ -8,8 +8,14 @@ require_once 'core/init.php';
         Redirect::to('index.php');
     }
 
-?>
+    if(!$user->hasPermission('user_home', 'read')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission user_home/read');
+        Redirect::to('index.php');
+    }
 
+    $approval = new Approval();
+
+?>
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -23,53 +29,44 @@ require_once 'core/init.php';
         <div class="row mt-2">
             <div class="col-1 col-md-2 col-lg-1 col-xl-1"></div>
             <div class="col-10 col-md-8 col-lg-10 col-xl-10">
-
-                <!-- App menu -->
-                <?php include_once Config::get('includes/main_menu'); ?>
-
-                Hello <?php  echo $user->data()->Email; ?>! <br/><br/>
-
-                <div class="table-responsive">
-                    <table class="table table-light table-striped table-hover">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Nr</th>
-                            <th scope="col">Tytuł</th>
-                            <th scope="col" class="text-center">Wersja</th>
-                            <th scope="col" class="text-center">Odpowiedź</th>
-                            <th scope="col" class="text-center">Zobacz</th>
-                        </tr>
-                        </thead>
-                        <tbody class="table-sm">
-
                 <?php
+                    // App menu
+                    include_once Config::get('includes/main_menu');
 
                     if(Session::exists('agreement_accept')) {
                         echo '<div class="alert alert-success" role="alert">'. Session::flash('agreement_accept') .'</div>';
                     }
-//                    echo $user->getUserGroup() . '<br/>';
-//                    echo $user->hasPermission('admin');
-
-                    $approval = new Approval();
-                    $approval_data = $approval->userApproval('WHERE a.IDUsers = '. $user->data()->ID .' ORDER BY a.ID DESC');
-                    $no = 1; //counter to table
-
-
-                    if($approval_data != false) {
-                        foreach ($approval_data as $a) {
-                            echo "\n<tr>\t";
-                            echo '<td>'. $no .'</td>';
-                            echo '<td>'. $a->Title . '</td>';
-                            echo '<td class="text-center">'. $a->Version . '.0</td>';
-                            echo '<td class="text-center'. (($a->AcceptAgreement == 1) ? '">TAK' : (($a->AcceptAgreement === 0) ? '">NIE"' : ' bg-danger">BRAK')) .'</td>';
-                            echo '<td class="text-center">'. '<a href="approvalusers.php?id=' . $a->AccessGuid . '">Pokaż</a>';
-                            echo "\t</tr>";
-                            $no++;
-                        }
+                    if(Session::exists('warning')) {
+                        echo '<div class="alert alert-warning" role="alert">'. Session::flash('warning') .'</div>';
                     }
 
                 ?>
 
+            <div class="row">
+                <div class="card border-primary mb-3 shadow rounded" style="min-width: 15rem; max-width: 22rem; margin-right: auto; margin-left: auto;">
+                    <div class="card-header text-primary">Witaj w apliakcji!</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title"><?php  echo $user->dataDetails()->FirstName .' '. $user->dataDetails()->LastName; ?></h5>
+                        <h6 class="card-subtitle mb-2 text-muted small"><?php echo $user->data()->Email; ?></h6>
+                        <p class="card-text text-muted small">Grupa <?php echo $user->getUserGroup(); ?></p>
+                    </div>
+                </div>
+                <?php
+
+                    $message = $approval->userApproval('WHERE a.IDUsers = '. $user->data()->ID .' AND a.AcceptAgreement IS NULL');
+
+                    if($message != false) {
+                        echo '<div class="card text-white bg-danger mb-3" style="min-width: 15rem; max-width: 27rem; margin-right: auto; margin-left: auto;">
+                                <div class="card-header">Ważne!!!</div>
+                                <div class="card-body text-white">
+                                    <h6 class="card-title">Użytkowniku <b>'. $user->dataDetails()->FirstName .' '. $user->dataDetails()->LastName .'</b></h6>
+                                    <p class="card-text">Udziel odpowiedzi na <u>wszystkie</u> regulaminy i zgody!<br>Liczba nieudzielonych odpowiedzi <b>'. count($message) .'</b> !!!</p>
+                                    <a href="hometable.php" class="btn btn-outline-light float-right">Przejdź</a>
+                                    <p class="card-subtitle text-dark small">Automation message.</p>
+                                </div>
+                            </div>';
+                    }
+                ?>
             </div>
             <div class="col-1 col-md-2 col-lg-1 col-xl-1"></div>
         </div>

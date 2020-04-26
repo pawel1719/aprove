@@ -52,7 +52,7 @@ class Mail {
                 'IdUser' => $this->_user->data()->ID
             ));
         }catch(Exception $e) {
-            echo 'Error send message! ' . $e->getMessage();
+            // echo 'Error send message! ' . $e->getMessage();
             Logs::addError('Cant send mail! Message '. $e->getMessage() .' Line: '. $e->getLine() .' File: '. $e->getFile());
         }
     }

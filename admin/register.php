@@ -8,8 +8,13 @@ require_once '../core/init.php';
         Redirect::to('../index.php');
     }
 
-?>
+    if(!$logged->hasPermission('admin_add_users', 'write')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_add_users/write');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
+    }
 
+?>
 <!DOCTYPE html>
 <HTML>
 <HEAD>

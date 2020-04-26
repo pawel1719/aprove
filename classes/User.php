@@ -164,13 +164,15 @@ class User {
         return false;
     }
 
-    public function hasPermission($key) {
+    public function hasPermission($key, $perm) {
         $group = $this->_db->get('Permission', array('ID', '=', $this->data()->Permission));
 
         if($group->count()) {
-            $permissions = json_decode($group->firstResult()->KeyPermission);
+            $permissions = json_decode($group->firstResult()->KeyPermission, false);
 
-            if($permissions->$key == true) {
+//            echo var_dump($permissions);
+
+            if($permissions->$key->$perm == true) {
                 return true;
             }
         }

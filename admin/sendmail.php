@@ -1,16 +1,19 @@
 <?php
 require_once '../core/init.php';
 
-$user = new User();
+    $user = new User();
 
-if(!$user->isLogged()) {
-    Logs::addError("Unauthorization access!");
-    Redirect::to('index.php');
-}
+    if(!$user->isLogged()) {
+        Logs::addError("Unauthorization access!");
+        Redirect::to('index.php');
+    }
+    if(!$user->hasPermission('admin_send_mail', 'write')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_send_mail/write');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
+    }
 
 ?>
-
-
 <!DOCTYPE html>
 <HTML>
 <HEAD>
@@ -29,7 +32,19 @@ if(!$user->isLogged()) {
 
         </div>
         <div class="col-10 col-md-8 col-lg-8">
+
+            <h2>Wyślij maila!</h2>
+            <hr>
+            <br>
+
             <?php
+
+            if(Session::exists('success')) {
+                echo '<div class="alert alert-success" role="alert">'. Session::flash('success') .'</div>';
+            }
+            if(Session::exists('error')) {
+                echo '<div class="alert alert-error" role="alert">'. Session::flash('success') .'</div>';
+            }
 
             if(Input::exists()) {
                 if(Token::check(Input::get('token'))) {
@@ -53,12 +68,19 @@ if(!$user->isLogged()) {
                        </HTML>
                        ';
 
-                       $mail = new Mail(true);
-                       $mail->createMessage(Input::get('mail_to'), 'Recipiest', Input::get('subject'), $HTML_MESSAGE);
+                        try {
+                            //send mail
+                            $mail = new Mail(true);
+                            $mail->createMessage(Input::get('mail_to'), 'Recipiest', Input::get('subject'), $HTML_MESSAGE);
+                        }catch(Exception $e) {
+                            Logs::addError('Cant send mail from admin panel!');
+                            Session::flash('error', 'Nie można wysłać wiadomości!');
+                            Redirect::to('sendmail.php');
+                        }
 
-                       Input::destroy('mail_to,subject,mail_body');
-
-                       echo '<div class="alert alert-success" role="alert">Send message</div>';
+                        Input::destroy('mail_to,subject,mail_body');
+                        Session::flash('success', 'Wiadomość wysłana!');
+                        Redirect::to('sendmail.php');
 
                     } else {
                         // ERRORS FROM VALIDATION

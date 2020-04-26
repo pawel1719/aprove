@@ -8,6 +8,12 @@ require_once '../core/init.php';
         Redirect::to('../index.php');
     }
 
+    if(!$user->hasPermission('admin_user_data', 'read')) {
+        Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_user_data/read');
+        Session::flash('warning', 'Nie masz uprawnień!');
+        Redirect::to('home.php');
+    }
+
     if(!Input::get('id')) {
         Session::flash('user_managment', 'Something went wrong!');
         Logs::addError("Incorrect address! Wrong ID.");
@@ -25,7 +31,6 @@ require_once '../core/init.php';
         .message_box{
             display: none;
         }
-
         .message_box-active{
             display: block;
         }
@@ -42,7 +47,7 @@ require_once '../core/init.php';
 
         </div>
         <div class="col-10 col-md-8 col-lg-8">
-            <h2>Managment user!</h2>
+            <h2>Zarządzaj użytkownikiem!</h2>
             <hr/>
             <div class="alert alert-success message_box"></div>
             <br>
