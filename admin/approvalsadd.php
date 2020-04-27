@@ -25,14 +25,15 @@ require_once '../core/init.php';
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col-1 col-md-2 col-lg-2">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
 
             <?php include_once Config::get('includes/second_admin_menu'); ?>
 
         </div>
-        <div class="col-10 col-md-8 col-lg-8">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
 
-            <h2 class="text-warning">Dodaj nową zgodę!</h2>
+            <h2 class="text-warning text-center text-lg-left">Dodaj nową zgodę!</h2>
+            <hr>
 
             <?php
 
@@ -130,7 +131,7 @@ require_once '../core/init.php';
             </form>
 
         </div>
-        <div class="col-1 col-md-2 col-lg-2"></div>
+        <div class="col-12  col-sm-12 col-md-12 col-lg-2"></div>
     </div>
 </div>
 

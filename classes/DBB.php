@@ -12,7 +12,7 @@ class DBB {
         try {
             $this->_pdo = new PDO('mysql:host=' . Config::get('mysql/host')
                 . ';port=' . Config::get('mysql/port')
-                . ';dbname=' . Config::get('mysql/db'),
+                . ';dbname=' . Config::get('mysql/db') .';charset=utf8',
                 Config::get('mysql/user'),
                 Config::get('mysql/password')
             );

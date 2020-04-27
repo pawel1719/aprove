@@ -26,12 +26,12 @@ require_once '../core/init.php';
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col-1 col-md-2 col-lg-2">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
             <?php include_once Config::get('includes/second_admin_menu'); ?>
         </div>
-        <div class="col-10 col-md-8 col-lg-8">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
 
-        <h3 class="text-warning">Dodaj nowego użytkownika!</h3>
+        <h3 class="text-warning text-center text-lg-left">Dodaj nowego użytkownika!</h3>
         <hr/>
 
 <?php
@@ -169,7 +169,7 @@ require_once '../core/init.php';
                     </div>
                 </div>
                 <div class="form-group form-row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">*Hasło</div>
@@ -177,7 +177,7 @@ require_once '../core/init.php';
                             <input type="password" class="form-control" id="password" name="password" placeholder="Podaj hasło...">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">*Powtórz hasło</div>
@@ -187,7 +187,7 @@ require_once '../core/init.php';
                     </div>
                 </div>
                 <div class="form-group form-row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">*Imię</div>
@@ -195,7 +195,7 @@ require_once '../core/init.php';
                             <input type="text" class="form-control" id="name" name="name" value="<?php echo escape(Input::get('name')); ?>" placeholder="Podaj imię...">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">*Nazwisko</div>
@@ -205,7 +205,7 @@ require_once '../core/init.php';
                     </div>
                 </div>
                 <div class="form-group form-row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">*Płeć</div>
@@ -217,7 +217,7 @@ require_once '../core/init.php';
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">*Grupa</div>
@@ -239,7 +239,7 @@ require_once '../core/init.php';
                     </div>
                 </div>
                 <div class="form-group form-row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">Data urodzenia</div>
@@ -247,7 +247,7 @@ require_once '../core/init.php';
                             <input type="date" class="form-control" id="birth" name="birth" value="<?php echo escape(Input::get('birth')); ?>">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">Pesel</div>
@@ -257,7 +257,7 @@ require_once '../core/init.php';
                     </div>
                 </div>
                 <div class="form-group form-row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">Numer dowodu</div>
@@ -265,7 +265,7 @@ require_once '../core/init.php';
                             <input type="text" class="form-control" id="id_card" name="id_card" value="<?php echo escape(Input::get('id_card')); ?>" placeholder="Podaj numer dowodu...">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">Termin ważności</div>
@@ -275,7 +275,7 @@ require_once '../core/init.php';
                     </div>
                 </div>
                 <div class="form-group form-row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">Firma</div>
@@ -283,7 +283,7 @@ require_once '../core/init.php';
                             <input type="text" class="form-control" id="company" name="company" value="<?php echo escape(Input::get('company')); ?>" placeholder="Podaj nazwę firmy...">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mt-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">Stanowisko</div>
@@ -300,7 +300,7 @@ require_once '../core/init.php';
             </form>
 
         </div>
-        <div class="col-1 col-md-2 col-lg-2"></div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2"></div>
     </div>
 </div>
 </BODY>

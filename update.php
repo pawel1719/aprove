@@ -116,7 +116,7 @@ if(Input::exists()) {
                 }
                 if(Input::get('Expiration_Date_Identification_Card') != $user->dataDetails()->ExpirationDateNoPersonalCard) {
                     $fields['ExpirationDateNoPersonalCard'] = Input::get('Expiration_Date_Identification_Card');
-                    $fields['ExpirationDateUpdatedAt'] = date('Y-m-d H:i:s');
+                    $fields['ExpirationDateNoPersonalCardUpdatedAt'] = date('Y-m-d H:i:s');
                 }
                     $fields['AgreeDataLiving'] = (Input::get('Agreement_City_Of_Living') == 'on') ? 1 : 0;
                 if(Input::get('City_Of_Living') != $user->dataDetails()->CityOfLiving) {
@@ -166,7 +166,7 @@ if(Input::exists()) {
                 //UPDATE DATA IN DB
                 $user->updateDetails($fields);
 
-                Session::flash('update', 'Data updating!');
+                Session::flash('update', 'Dane zaktualizowane!');
                 Redirect::to('update.php');
 
             } catch(Exception $e) {

@@ -70,14 +70,14 @@ require_once '../core/init.php';
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col-1 col-md-2 col-lg-2">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
 
             <?php include_once Config::get('includes/second_admin_menu'); ?>
 
         </div>
-        <div class="col-10 col-md-8 col-lg-8">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
 
-            <h2 class="text-warning" style="margin-left: auto; margin-right: auto;">Zarządzaj użytkownikami do<br><u><?php echo $approval->Title .' v'. $approval->Version; ?>.0!</u></h2>
+            <h2 class="text-warning text-center text-lg-left">Zarządzaj użytkownikami do<br><u><?php echo $approval->Title .' v'. $approval->Version; ?>.0!</u></h2>
             <hr>
             <br>
 
@@ -178,7 +178,7 @@ require_once '../core/init.php';
                 </nav>
 
         </div>
-        <div class="col-1 col-md-2 col-lg-2"></div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2"></div>
     </div>
 </div>
     <script src="../includes/JS/ajax.js"></script>
