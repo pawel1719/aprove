@@ -51,11 +51,20 @@ require_once 'core/init.php';
                        // header( "refresh: 3; url=logout.php" );
                        Redirect::to('home.php');
                    } else {
-                       echo '<div class="alert alert-danger" role="alert">Niepoprawny login lub hasło</div>';
-                       Logs::addWarning('Incorrect login or password! Account is not blocked.');
+                       if(((int)$user->data()->InvalidAttemptCounter + 1) >= Config::get('user/number_failed_login_attempts')) {
+                            echo '<div class="alert alert-danger" role="alert">Konto zostało zablokowane!</div>';
+                            Logs::addWarning('Account is blocking.');
+                       } else {
+                            echo '<div class="alert alert-danger" role="alert">Niepoprawny login lub hasło</div>';
+                            Logs::addWarning('Incorrect login or password! Account is not blocked.');
+                       }
                    }
                } else {
                    // when account was blocked
+                   if($login) {
+                       Logs::addInformation('Unlocked account and success login!');
+                       Redirect::to('home.php');
+                   }
                    echo '<div class="alert alert-danger" role="alert">Konto jest zablokowane!</div>';
                }
 
