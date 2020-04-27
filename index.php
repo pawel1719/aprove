@@ -31,8 +31,6 @@ require_once 'core/init.php';
         echo Session::flash('registed');
     }
 
-//    echo '<a href="register.php">Register</a><hr />';
-
     if(Input::exists()) {
        if(Token::check(Input::get('token'))) {
 
@@ -46,10 +44,21 @@ require_once 'core/init.php';
                $user = new User();
                $login = $user->login(Input::get('email'), Input::get('password'));
 
-               if($login) {
-                   Redirect::to('home.php');
+               if((int)$user->data()->IsBlocked != 1) {
+                   if($login) {
+                       echo '<div class="alert alert-success" role="alert">zalogowane</div>';
+                       Logs::addInformation('Success login!');
+                       // header( "refresh: 3; url=logout.php" );
+                       Redirect::to('home.php');
+                   } else {
+                       echo '<div class="alert alert-danger" role="alert">Niepoprawny login lub hasło</div>';
+                       Logs::addWarning('Incorrect login or password! Account is not blocked.');
+                   }
+               } else {
+                   // when account was blocked
+                   echo '<div class="alert alert-danger" role="alert">Konto jest zablokowane!</div>';
                }
-               
+
            } else {
                // Save information to file with logs
                Logs::addWarning('Invalid attempt login! User: '. Input::get('email') .'. ');

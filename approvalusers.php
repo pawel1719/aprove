@@ -1,7 +1,7 @@
 <?php
 require_once 'core/init.php';
 
-
+    $db = DBB::getInstance();
     $user = new User();
 
     if(!$user->isLogged() && !Token::check(Cookie::get('token')))
@@ -114,6 +114,20 @@ require_once 'core/init.php';
                             $mail = new Mail();
                             $mail->createMessage($address, $name, $subject, $body);
                             unset($address, $name, $subject, $body);
+
+                            // save to history
+                            $db->insert('agreement_history', array(
+                                'IDUser'    => $user->data()->ID,
+                                'IDAgreements'  => $approval_data[0]->ID_a,
+                                'AnswerAgree'   => (Input::get('approval_1') == 'yes' ? 1 : 0),
+                                'IPAddress'     => Input::get('REMOTE_ADDR'),
+                                'Port'          => Input::get('REMOTE_PORT'),
+                                'Devices'       => Input::get('HTTP_USER_AGENT'),
+                                'Request'       => Input::get('REQUEST_METHOD'),
+                                'WebAddress'    => Input::get('REQUEST_URI'),
+                                'CreatedAt'     => date('Y-m-d H:i:s')
+                            ));
+
 
                             Session::flash('agreement_accept', 'Twoja decyzja została zapisana!');
                             Logs::addInformation('Save answer user!');

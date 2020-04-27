@@ -116,25 +116,49 @@ class User {
 
         if($user) {
             if ($this->data()->Password === Hash::make($password, $this->data()->Salt)) {
-                //Correct login attempt
-                $this->_db->update('users', $this->data()->ID, array(
-                    'LastLoginAt' => date('Y-m-d H:i:s'),
-                    'UpdatedAt' => date('Y-m-d H:i:s'),
-                    'CounterCorrectLogin' => $this->data()->CounterCorrectLogin + 1,
-                    'BlockedAt' => null,
-                    'BlockedTo' => null,
-                    'InvalidAttemptCounter' => 0,
-                    'IsBlocked' => 0
-                ));
-                Session::put($this->_sessionName, $this->data()->ID);
-                return true;
+                if(date('Y-m-d H:i:s') > $this->data()->BlockedTo) {
+                    // correct login attempt
+                    $this->_db->update('users', $this->data()->ID, array(
+                        'LastLoginAt' => date('Y-m-d H:i:s'),
+                        'UpdatedAt' => date('Y-m-d H:i:s'),
+                        'CounterCorrectLogin' => $this->data()->CounterCorrectLogin + 1,
+                        'BlockedTo' => null,
+                        'InvalidAttemptCounter' => 0,
+                        'IsBlocked' => 0
+                    ));
+                    Session::put($this->_sessionName, $this->data()->ID);
+                    return true;
+                }
+            } else {
+                // fields in database table
+                $fields = [];
+                $fields['UpdatedAt'] = date('Y-m-d H:i:s');
+                $fields['CounterCorrectLogin'] = (int)$this->data()->CounterCorrectLogin + 1;
+                $fields['CounterIncorretLogin'] = (int)$this->data()->CounterIncorretLogin + 1;
+
+                // when account isnt blocked
+                if((int)$this->data()->IsBlocked != 1) {
+                    $fields['InvalidAttemptCounter'] = (int)$this->data()->InvalidAttemptCounter + 1;
+                }
+
+                // account blocking
+                if(((int)$this->data()->InvalidAttemptCounter + 1) >= Config::get('user/number_failed_login_attempts')) {
+                    $fields['IsBlocked '] = 1;
+                    $fields['BlockedAt '] = date('Y-m-d H:i:s');
+                    $fields['BlockedTo '] = date('Y-m-d H:i:s', (time() + (60*15)));
+                    $fields['InvalidAttemptCounter '] = 0;
+                }
+
+
+                // save data to database
+                $this->_db->update('users', $this->data()->ID, $fields);
             }
         }
         return false;
     }
 
     public function hasPermission($key, $perm) {
-        $group = $this->_db->get('Permission', array('ID', '=', $this->data()->Permission));
+        $group = $this->_db->get('permission', array('ID', '=', $this->data()->Permission));
 
         if($group->count()) {
             $permissions = json_decode($group->firstResult()->KeyPermission, false);
@@ -157,7 +181,7 @@ class User {
     }
 
     public function getUserGroup() {
-        $nameGroup = $this->_db->get('Permission', array('ID', '=', $this->data()->Permission));
+        $nameGroup = $this->_db->get('permission', array('ID', '=', $this->data()->Permission));
 
         return $nameGroup->firstResult()->Name;
     }
