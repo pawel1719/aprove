@@ -148,6 +148,7 @@ require_once '../core/init.php';
                 }
 
                 echo '</div>';
+                Logs::addWarning('Error from validation while was create new account.');
             }
 
         }

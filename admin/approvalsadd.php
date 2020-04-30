@@ -10,7 +10,7 @@ require_once '../core/init.php';
     if(!$user->hasPermission('admin_add_approval', 'write')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_add_approval/write');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
 ?>
@@ -83,6 +83,7 @@ require_once '../core/init.php';
                             }
 
                             Session::flash('agreement', '<div class="alert alert-success" role="alert">Zgoda dodana!</div>');
+                            Logs::addInformation('Added new approvals. Title: '. Input::get('title'));
                             Input::destroy('title', 'content', 'start', 'end');
                             Redirect::to('approvalsadd.php');
 
@@ -95,6 +96,7 @@ require_once '../core/init.php';
                             }
 
                             echo '</div>';
+                            Logs::addWarning('Was some errors from validation.');
                         }
 
                     }

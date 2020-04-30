@@ -11,7 +11,7 @@ require_once '../core/init.php';
     if(!$user->hasPermission('admin_all_users', 'read')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_all_users/read');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
 ?>

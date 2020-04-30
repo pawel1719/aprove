@@ -172,6 +172,20 @@ class User {
         return false;
     }
 
+    public function connection($logged = 0, $blocked = 0) {
+        $fields = [];
+
+        $fields['IPAddress']    = Input::get('REMOTE_ADDR');
+        $fields['Port']         = Input::get('REMOTE_PORT');
+        $fields['Device']       = Input::get('HTTP_USER_AGENT');
+        $fields['Url']          = Input::get('REQUEST_URI');
+        $fields['Logged']       = $logged;
+        $fields['Blocked']      = $blocked;
+        $fields['CreatedAt']    = date('Y-m-d H:i:s');
+
+        return $this->_db->insert('connestions', $fields);
+    }
+
     public function data() {
         return $this->_data;
     }

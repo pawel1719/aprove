@@ -11,7 +11,7 @@ require_once '../core/init.php';
     if(!$user->hasPermission('admin_list_approval', 'read')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_list_approval/read');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
 ?>

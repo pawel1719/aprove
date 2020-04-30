@@ -10,7 +10,8 @@ require_once 'core/init.php';
 
     if(!$user->hasPermission('user_home', 'read')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission user_home/read');
-        Redirect::to('index.php');
+        Session::put('error', 'Nie masz uprawnień do tej strony');
+        Redirect::to('logout.php');
     }
 
     $approval = new Approval();

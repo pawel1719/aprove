@@ -10,7 +10,7 @@ require_once '../core/init.php';
     if(!$user->hasPermission('admin_send_mail', 'write')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_send_mail/write');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
 ?>
@@ -52,6 +52,15 @@ require_once '../core/init.php';
                     $validation = $validate->check($_POST, array(
                         'mail_to' => array(
                             'required' => true
+                        ),
+                        'subject' => array(
+                            'required' => true,
+                            'min' => 3,
+                            'max' => 50
+                        ),
+                        'mail_body' => array(
+                            'required' => true,
+                            'min' => 7
                         )
                     ));
 

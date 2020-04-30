@@ -11,7 +11,7 @@ require_once '../core/init.php';
     if(!$user->hasPermission('admin_charts_approval', 'read')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_charts_approval/read');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
 ?>
@@ -30,7 +30,7 @@ require_once '../core/init.php';
             function drawChart() {
 
                 var data = google.visualization.arrayToDataTable([
-                    ['Task', 'Hours per Day'],
+                    ['Pac Man', 'Percentage'],
                     ['Nie zaakceptowane',  val1],
                     ['Zaakceptowane',      val2],
                     ['Nie uzupełnione',    val3]
@@ -83,7 +83,7 @@ require_once '../core/init.php';
 
                 //js listeren
                 $js = "window.addEventListener('load', (event) => {\n";
-                $js .= "\twykres('chart_{$agreement->IDagreementsConfiguration}', '{$agreement->Title} - wersja 0.{$agreement->Version}', {$no}, {$yes}, {$null});\n";
+                $js .= "\twykres('chart_{$agreement->IDagreementsConfiguration}', '{$agreement->Title} - wersja {$agreement->Version}.0', {$no}, {$yes}, {$null});\n";
                 $js .= "});\n";
                 // div in html on charts
                 $div_html .= '<div id="chart_'. (int)$agreement->IDagreementsConfiguration .'" style="width: 100%; height: 350px; margin-bottom: 10px;"></div>' . "\n";

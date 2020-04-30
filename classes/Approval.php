@@ -96,10 +96,10 @@ class Approval {
 
     public function updateAgreement($id = null, $fields = array())
     {
-        $fields['DataAccept'] = date('Y-m-d H:i:s');
-        $fields['IPAddress '] = Input::get('REMOTE_ADDR');
-        $fields['Port'] = Input::get('REMOTE_PORT');
-        $fields['Device'] = Input::get('HTTP_USER_AGENT');
+        $fields['DataAccept']   = date('Y-m-d H:i:s');
+        $fields['IPAddress ']   = Input::get('REMOTE_ADDR');
+        $fields['Port']         = Input::get('REMOTE_PORT');
+        $fields['Device']       = Input::get('HTTP_USER_AGENT');
 
         if(!$this->_db->update('agreements', $id, $fields))
         {

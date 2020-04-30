@@ -8,6 +8,7 @@ USE approvals_data;
 CREATE TABLE IF NOT EXISTS `users`
 (
 	`ID` INT NOT NULL  AUTO_INCREMENT,
+	`IDHash` VARCHAR(100) NOT NULL UNIQUE,
     `Email` VARCHAR(60) NOT NULL UNIQUE,        # Email as a login
     `Password` VARCHAR(100) NOT NULL,
     `Salt` VARCHAR(150) NOT NULL,
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `users`
 -- ----------------------------------------------
 /* TABLES USERS_DATA */
 -- ----------------------------------------------
-CREATE TABLE IF NOT EXISTS `Permission`
+CREATE TABLE IF NOT EXISTS `permission`
 (
     `ID` INT NOT NULL AUTO_INCREMENT,
     `Name` VARCHAR(25) NOT NULL,
@@ -50,23 +51,27 @@ CREATE TABLE IF NOT EXISTS `users_data`
     `IDusersDataConfig` INT NOT NULL,
     `AgreeDateOfBirth` SMALLINT,
     `DateOfBirth` DATE,
+    `DateOfBirthUpdatedAt` DATETIME,
     `AgreeCityOfBirth` SMALLINT,
     `CityOfBirth` VARCHAR(30) NULL,
     `CityOfBirthCreatedAt` DATETIME,
     `CityOfBirthUpdatedAt` DATETIME,
 	`AgreeFirstName` SMALLINT,
     `FirstName` VARCHAR(30) NOT NULL,
+    `FirstNameUpdatedAt` DATETIME,
     `AgreeMiddleName` SMALLINT,
     `MiddleName` VARCHAR(30),				#DRUGIE IMIE
+    `MiddleNameUpdatedAt` DATETIME,
     `AgreeLastName` SMALLINT,
     `LastName` VARCHAR(40) NOT NULL,
+    `LastNameUpdatedAt` DATETIME,
     `AgreeFamilyName` SMALLINT,
     `FamilyName` VARCHAR(40) NULL,			#NAZWISKO RODOWE
+    `FamilyNameUpdatedAt` DATETIME,
     `AgreePhoneNumber` SMALLINT,
     `PhoneNumber` VARCHAR(15),
-    `PhoneCreatedAt` DATETIME,
-    `PhoneUpdatedAt` DATETIME,
-    `AgreeGender` SMALLINT,
+    `PhoneNumberCreatedAt` DATETIME,
+    `PhoneNumberUpdatedAt` DATETIME,
     `Gender` SMALLINT NOT NULL,
     `AgreePESEL` SMALLINT,
     `PESEL` VARCHAR(11),
@@ -77,8 +82,8 @@ CREATE TABLE IF NOT EXISTS `users_data`
     `IdentificationCardCreatedAt` DATETIME,
     `IdentificationCardUpdatedAt` DATETIME,
     `ExpirationDateNoPersonalCard` DATE,
-    `ExpirationDateCreatedAt` DATETIME,
-    `ExpirationDateUpdatedAt` DATETIME,
+    `ExpirationDateNoPersonalCardCreatedAt` DATETIME,
+    `ExpirationDateNoPersonalCardUpdatedAt` DATETIME,
     `AgreeDataLiving` SMALLINT,
     `CityOfLiving` VARCHAR(30),
     `CityOfLivingCreatedAt` DATETIME,
@@ -172,14 +177,13 @@ CREATE TABLE IF NOT EXISTS `password`
 CREATE TABLE IF NOT EXISTS `connestions`
 (
 	`ID` INT NOT NULL AUTO_INCREMENT,
-    `IPAddress` VARCHAR(28) NOT NULL,			#IPv4 OR IPv6
-    `InvalidAttempts` SMALLINT NOT NULL, 		#INVALID ATEMPT LOGIN
-    `Blocked` SMALLINT NOT NULL DEFAULT 0,		#BLOCKED ACCESS TO APP
-    `BlockedAt` DATETIME,						#DATA BLOCKED ACCESS
-    `DoNotBlock` SMALLINT NOT NULL DEFAULT 0,	#ACCESS NEVER BE BLOCKED - default is switch off
-    `CreatedAt` DATETIME NOT NULL,				#DATA CREATED 
-    `LastAttempts` DATETIME NOT NULL,			#LAST INVALID ATTEMPT LOGIN
-    `UpdatedAt` DATETIME NOT NULL,				#DATE UPDATED ROW
+    `IPAddress` VARCHAR(28) NULL,			#IPv4 OR IPv6
+    `Port` VARCHAR(10) NULL,			    #IPv4 OR IPv6
+    `Device` VARCHAR(255),
+    `Url` VARCHAR(255),
+    `Blocked` SMALLINT NULL DEFAULT 0,		#BLOCKED ACCESS TO APP
+    `Logged` SMALLINT NULL,
+    `CreatedAt` DATETIME NULL,				#DATA CREATED
     PRIMARY KEY(`ID`)
 )ENGINE=InnoDB;
 
@@ -188,21 +192,23 @@ CREATE TABLE IF NOT EXISTS `connestions`
 -- TABLES logs
 -- ----------------------------------------------
 /* Save information about action in app */
-CREATE TABLE IF NOT EXISTS `logs`
+CREATE TABLE IF NOT EXISTS `agreement_history`
 (
     `ID` INT NOT NULL AUTO_INCREMENT,
     `IPAddress` VARCHAR(28),
-    `CreatedAt` DATETIME NOT NULL,
-    `Action` VARCHAR(255),
+    `Port` VARCHAR(28),
     `Devices` VARCHAR(255),     #WEBSITE APP
-    `WebAddress` VARCHAR(200),
     `Request` VARCHAR(50),
+    `WebAddress` VARCHAR(200),
+    `IDUser` VARCHAR(255),
+    `IDAgreements` VARCHAR(255),
+    `AnswerAgree` SMALLINT,
+    `CreatedAt` DATETIME NOT NULL,
     PRIMARY KEY(`ID`)
 )ENGINE = InnoDB;
 
-
 -- ---------------------------------------------
--- TABLES AGREEMENTS
+-- TABLES AGREEMENTS CONFIGURATION
 -- ----------------------------------------------
 CREATE TABLE IF NOT EXISTS `agreements_configuration`
 (
@@ -230,15 +236,18 @@ CREATE TABLE IF NOT EXISTS `agreements`
     `ID` INT NOT NULL AUTO_INCREMENT,
     `IDUsers` INT NOT NULL,
     `IDagreementsConfiguration` INT NOT NULL,
-    `AccessGuid` VARCHAR(100),
-    `Password` VARCHAR(100),
+    `AccessGuid` VARCHAR(130),
+    `Password` VARCHAR(130),
     `PasswordValidity` DATETIME NOT NULL,   #TIME LIVE PASSWORD - 24H
-    `AcceptAgreement` INT(1) NOT NULL,
+    `AttemptLogin` INT(2) NULL,
+    `AcceptAgreement` INT(1) NULL,
     `DataAccept` DATETIME,
     `IPAddress` VARCHAR(28),
     `Port` VARCHAR(10),
     `Device` VARCHAR(255),
     `HashToAgrremnetForUser` VARCHAR(255),
+    `AddedBy` INT NOT NULL,
+    `AddedAt` DATETIME,
     PRIMARY KEY(`ID`)
 )ENGINE = InnoDB;
 
@@ -249,14 +258,16 @@ CREATE TABLE IF NOT EXISTS `agreements`
 CREATE TABLE IF NOT EXISTS `sended_email`
 (
     `ID` INT NOT NULL AUTO_INCREMENT,
-    `From` VARCHAR(100) NOT NULL,
-    `To` VARCHAR(100) NOT NULL,
+    `From` VARCHAR(100) NULL,
+    `To` VARCHAR(100) NULL,
+    `To_CC` VARCHAR(100) NULL,
+    `To_BCC` VARCHAR(100) NULL,
+    `Header` TEXT,
     `Subject` VARCHAR(255),
     `Body` TEXT,
     `Attachment` VARCHAR(100),
-    `Signature` TEXT,
+    `Errors` VARCHAR(255),
     `DateSend` DATETIME,
-    `IdAgreement` INT,
     `IdUser` INT,
     PRIMARY KEY(`ID`)
 )ENGINE = InnoDB;

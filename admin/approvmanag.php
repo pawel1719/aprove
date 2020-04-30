@@ -11,7 +11,7 @@
     if(!$user->hasPermission('admin_list_approval', 'read')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_list_approval/read');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
     if(!Input::get('approval')) {
@@ -34,7 +34,7 @@
     if(!$user->hasPermission('admin_edit_approval', 'write')) {
         Logs::addError('User '. $user->data()->ID .' dont have permission to this page! Permission admin_edit_approval/write');
         Session::flash('warning', 'Nie masz uprawnień!');
-        Redirect::to('home.php');
+        Redirect::to('../home.php');
     }
 
     if(!Input::exists()) {
@@ -133,6 +133,7 @@
                         }
 
                         echo '</div>';
+                        Logs::addWarning('Error in validation data.');
                     }
 
                 }

@@ -30,6 +30,9 @@ require_once 'core/init.php';
     if(Session::exists('registed')) {
         echo Session::flash('registed');
     }
+    if(Session::exists('error')) {
+        echo '<div class="alert alert-danger" role="alert">'. Session::flash('error') .'</div>';
+    }
 
     if(Input::exists()) {
        if(Token::check(Input::get('token'))) {
@@ -48,14 +51,17 @@ require_once 'core/init.php';
                    if($login) {
                        echo '<div class="alert alert-success" role="alert">zalogowane</div>';
                        Logs::addInformation('Success login!');
+                       $user->connection(1, 0);
                        // header( "refresh: 3; url=logout.php" );
                        Redirect::to('home.php');
                    } else {
                        if(((int)$user->data()->InvalidAttemptCounter + 1) >= Config::get('user/number_failed_login_attempts')) {
                             echo '<div class="alert alert-danger" role="alert">Konto zostało zablokowane!</div>';
+                            $user->connection(0, 1);
                             Logs::addWarning('Account is blocking.');
                        } else {
                             echo '<div class="alert alert-danger" role="alert">Niepoprawny login lub hasło</div>';
+                            $user->connection(0, 0);
                             Logs::addWarning('Incorrect login or password! Account is not blocked.');
                        }
                    }

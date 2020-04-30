@@ -51,27 +51,32 @@ function manage_agree(form_input) {
 
 form.addEventListener("change", function (e) {
     if (e.target.type === "checkbox") {
-        spinner.classList.add("spinner_container-active");
-        if (e.target.name === "select_all") {
-            if (e.target.checked === true) {
-                changeAllValues(true);
+        if (confirm("Czy na pewno chcesz dokonać zmiany?")) {
+            spinner.classList.add("spinner_container-active");
+            if (e.target.name === "select_all") {
+                if (e.target.checked === true) {
+                    changeAllValues(true);
+                } else {
+                    changeAllValues(false);
+                }
             } else {
-                changeAllValues(false);
+                if (e.target.checked) {
+                    e.target.parentElement.parentElement.classList.add('table-success');
+                    e.target.parentElement.parentElement.classList.remove('table-danger');
+                    manage_agree(e.target);
+                } else {
+                    e.target.parentElement.parentElement.classList.remove('table-success');
+                    e.target.parentElement.parentElement.classList.add('table-danger');
+                    manage_agree(e.target);
+                }
             }
+            setTimeout(() => {
+                spinner.classList.remove("spinner_container-active");
+            }, 2000);
         } else {
-            if (e.target.checked) {
-                e.target.parentElement.parentElement.classList.add('table-success');
-                e.target.parentElement.parentElement.classList.remove('table-danger');
-                manage_agree(e.target);
-            } else {
-                e.target.parentElement.parentElement.classList.remove('table-success');
-                e.target.parentElement.parentElement.classList.add('table-danger');
-                manage_agree(e.target);
-            }
+            location.reload();
+            console.log("You pressed Cancel!");
         }
-        setTimeout(()=>{
-            spinner.classList.remove("spinner_container-active");
-        },2000);
     }
 })
 
