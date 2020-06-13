@@ -44,7 +44,7 @@ require_once 'core/init.php';
     </style>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A">
 <div class="container">
     <div class="row mt-2">
         <div class="col-1 col-md-3 col-lg-1"></div>

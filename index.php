@@ -16,9 +16,9 @@ require_once 'core/init.php';
     <?php include_once Config::get('includes/main_index'); ?>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A"><!--8CBF69  B36A59   6A95BF-->
 
-    <div class="container">
+<div class="container">
         <div class="row mt-5">
             <div class="col-1 col-md-3 col-lg-4"></div>
             <div class="col-10 col-md-6 col-lg-4">

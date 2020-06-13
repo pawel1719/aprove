@@ -27,7 +27,7 @@ require_once 'core/init.php';
     </style>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A">
 <div class="container">
     <div class="row mt-2">
         <div class="col-1 col-md-3 col-lg-1"></div>
@@ -46,14 +46,15 @@ require_once 'core/init.php';
                 'password_current' => array(
                     'required' => true
                 ),
-                'password_new' => array(
-                    'required' => true,
-                    'min' => 6
-                ),
-                'password_new_again' => array(
+                'nowe_haslo' => array(
                     'required' => true,
                     'min' => 6,
-                    'matches' => 'password_new'
+                    'strongPassword' => true
+                ),
+                'ponownie_nowe_haslo' => array(
+                    'required' => true,
+                    'min' => 6,
+                    'matches' => 'nowe_haslo'
                 )
             ));
 
@@ -63,11 +64,11 @@ require_once 'core/init.php';
                     echo '<div class="alert alert-danger" role="alert">Aktualne hasło jest nie poprawne!</div>';
                     Logs::addWarning('Current password is wrong.');
                 } else {
-                    if($user->passwordRepeated(Input::get('password_new'), Config::get('user/can_not_use_last_passwords'))) {
+                    if($user->passwordRepeated(Input::get('nowe_haslo'), Config::get('user/can_not_use_last_passwords'))) {
 
                         $salt = Hash::slat();
                         $user->update(array(
-                            'Password' => Hash::make(Input::get('password_new'), $salt),
+                            'Password' => Hash::make(Input::get('nowe_haslo'), $salt),
                             'Salt' => $salt,
                             'PasswordCreadtedAt' => date('Y-m-d H:i:s'),
                             'UpdatedAt' => date('Y-m-d H:i:s')
@@ -109,12 +110,12 @@ require_once 'core/init.php';
                     <input type="password" name="password_current" id="password_current" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="password_new">Nowe hasło</label>
-                    <input type="password" name="password_new" id="password_new" class="form-control">
+                    <label for="nowe_haslo">Nowe hasło</label>
+                    <input type="password" name="nowe_haslo" id="nowe_haslo" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="password_new_again">Powtórz nowe hasło</label>
-                    <input type="password" name="password_new_again" id="password_new_again" class="form-control">
+                    <label for="ponownie_nowe_haslo">Powtórz nowe hasło</label>
+                    <input type="password" name="ponownie_nowe_haslo" id="ponownie_nowe_haslo" class="form-control">
                 </div>
 
                 <input type="hidden" name="token" id="token" value="<?php echo Token::generate(); ?>">

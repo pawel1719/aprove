@@ -24,7 +24,7 @@ require_once 'core/init.php';
     <?php include_once Config::get('includes/main_index'); ?>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A">
 
     <div class="container">
         <div class="row mt-2">
@@ -57,17 +57,21 @@ require_once 'core/init.php';
                     $message = $approval->userApproval('WHERE a.IDUsers = '. $user->data()->ID .' AND a.AcceptAgreement IS NULL');
 
                     if($message != false) {
-                        echo '<div class="card text-white bg-danger mb-3" style="min-width: 15rem; max-width: 27rem; margin-right: auto; margin-left: auto;">
-                                <div class="card-header">Ważne!!!
-                                    <span class="badge badge-dark badge-pill float-right">'. count($message) .'</span>
-                                </div>
-                                <div class="card-body text-white">
-                                    <h6 class="card-title">Użytkowniku <b>'. $user->dataDetails()->FirstName .' '. $user->dataDetails()->LastName .'</b></h6>
-                                    <p class="card-text">Udziel odpowiedzi na <u>wszystkie</u> regulaminy i zgody!<br>Liczba nieudzielonych odpowiedzi <b>'. count($message) .'</b> !!!</p>
-                                    <a href="hometable.php" class="btn btn-outline-light float-right">Przejdź</a>
-                                    <p class="card-subtitle text-dark small">Automation message.</p>
-                                </div>
-                            </div>';
+                        if((int)$message[0]->IsActived == 1) {
+                            if ($message[0]->DateStart <= date('Y-m-d')) {
+                                echo '<div class="card text-white bg-danger mb-3" style="min-width: 15rem; max-width: 27rem; margin-right: auto; margin-left: auto;">
+                                    <div class="card-header">Ważne!!!
+                                        <span class="badge badge-dark badge-pill float-right">' . count($message) . '</span>
+                                    </div>
+                                    <div class="card-body text-white">
+                                        <h6 class="card-title">Użytkowniku <b>' . $user->dataDetails()->FirstName . ' ' . $user->dataDetails()->LastName . '</b></h6>
+                                        <p class="card-text">Udziel odpowiedzi na <u>wszystkie</u> regulaminy i zgody!<br>Liczba nieudzielonych odpowiedzi <b>' . count($message) . '</b> !!!</p>
+                                        <a href="hometable.php" class="btn btn-outline-light float-right">Przejdź</a>
+                                        <p class="card-subtitle text-dark small">Automation message.</p>
+                                    </div>
+                                </div>';
+                            }
+                        }
                     }
                 ?>
             </div>

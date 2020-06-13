@@ -21,7 +21,7 @@ require_once 'core/init.php';
     <?php include_once Config::get('includes/main_index'); ?>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A">
 
     <div class="container">
         <div class="row mt-2">
@@ -57,14 +57,18 @@ require_once 'core/init.php';
 
                             if($approval_data != false) {
                                 foreach ($approval_data as $a) {
-                                    echo "\n<tr>\t";
-                                    echo '<td>'. $no .'</td>';
-                                    echo '<td>'. $a->Title . '</td>';
-                                    echo '<td class="text-center">'. $a->Version . '.0</td>';
-                                    echo '<td class="text-center'. (($a->AcceptAgreement == '1') ? '">TAK' : (($a->AcceptAgreement === '0') ? '">NIE' : ' bg-danger">BRAK')) .'</td>';
-                                    echo '<td class="text-center">'. '<a href="approvalusers.php?id=' . $a->AccessGuid . '">Pokaż</a>';
-                                    echo "\t</tr>";
-                                    $no++;
+                                    if ((int)$a->IsActived == 1) {
+                                        if ($a->DateStart <= date('Y-m-d')) {
+                                            echo "\n<tr>\t";
+                                            echo '<td>' . $no . '</td>';
+                                            echo '<td>' . $a->Title . '</td>';
+                                            echo '<td class="text-center">' . $a->Version . '.0</td>';
+                                            echo '<td class="text-center' . (($a->AcceptAgreement == '1') ? '">TAK' : (($a->AcceptAgreement === '0') ? '">NIE' : ' bg-danger">BRAK')) . '</td>';
+                                            echo '<td class="text-center">' . '<a href="approvalusers.php?id=' . $a->AccessGuid . '">Pokaż</a>';
+                                            echo "\t</tr>";
+                                            $no++;
+                                        }
+                                    }
                                 }
                             }
 

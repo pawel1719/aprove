@@ -26,7 +26,7 @@ class Validation {
                         break;
                         case 'max':
                             if(strlen($value) > $rule_value) {
-                                $this->addError("{$item} musi być maksymalnie {$rule_value} znaków.");
+                                $this->addError("{$item} może być maksymalnie {$rule_value} znaków.");
                             }
                         break;
                         case 'matches':
@@ -38,6 +38,12 @@ class Validation {
                             $check = $this->_db->get($rule_value, array($item, '=', $value));
                             if($check->count()) {
                                 $this->addError("{$item} już istnieje.");
+                            }
+                        break;
+                        case 'strongPassword' :
+                            //validations a strong password upercase and lowercase, number and special charset with out sapce
+                            if(preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[\!\@\#\$\%\^\&\*\(\)\_\+\-\=])(?=.*[A-Z])(?!.*\s).{2,}$/", $value) !== 1) {
+                                $this->addError("{$item} musi zawierać duże i małe litery, cyfrę i znak specjalny!");
                             }
                         break;
                     }

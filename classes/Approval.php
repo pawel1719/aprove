@@ -29,16 +29,17 @@ class Approval {
     }
 
     public function data() {
-        $this->_data = $this->_db->query('SELECT 
-            DISTINCT(ac.Title)
-            ,ac2.Version
-            ,ac2.IsActived
-            ,ac2.DateStart
-            ,ac2.DateEnd
-            ,ac2.AgreementGuid
-            ,ac2.CreateAt
-        FROM agreements_configuration ac LEFT JOIN agreements_configuration ac2 ON ac.Title=ac2.Title
-        ORDER BY ac.Title ASC, ac2.Version DESC');
+        $this->_data = $this->_db->query('SELECT DISTINCT
+                 ac.Title
+                ,ac2.Version
+                ,ac2.IsActived
+                ,ac2.DateStart
+                ,ac2.DateEnd
+                ,ac2.AgreementGuid
+                ,ac2.CreateAt
+                ,(SELECT count(IDUsers) FROM agreements WHERE IDagreementsConfiguration = ac.ID) NoUsers
+            FROM agreements_configuration ac LEFT JOIN agreements_configuration ac2 ON ac.ID=ac2.ID
+            ORDER BY ac.Title ASC, ac2.Version DESC');
 
         if(!$this->_data)
         {

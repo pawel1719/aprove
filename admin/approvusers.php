@@ -60,7 +60,7 @@ require_once '../core/init.php';
     </style>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A">
 
     <div class="spinner_container">
         <div class="spinner-border" role="status">

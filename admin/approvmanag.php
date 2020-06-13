@@ -52,7 +52,7 @@
     <?php include_once Config::get('includes/second_index'); ?>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A">
 
 <div class="container">
     <div class="row mt-5">

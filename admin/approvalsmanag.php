@@ -22,7 +22,7 @@ require_once '../core/init.php';
     <?php include_once Config::get('includes/second_index'); ?>
 
 </HEAD>
-<BODY class="bg-secondary">
+<BODY style="background-color: #59B39A">
 
 <div class="container">
     <div class="row mt-5">
@@ -47,7 +47,7 @@ require_once '../core/init.php';
 
             <div class="table-responsive">
                 <table class="table table-light table-striped table-hover">
-                    <thead class="thead-dark">
+                    <thead class="thead-dark small">
                     <tr>
                         <th scope="col">Nr</th>
                         <th scope="col">Tytuł</th>
@@ -55,7 +55,8 @@ require_once '../core/init.php';
                         <th scope="col">Aktywna</th>
                         <th scope="col">Początek</th>
                         <th scope="col">Koniec</th>
-                        <th scope="col">Członkowie</th>
+                        <th scope="col">Osób</th>
+                        <!-- <th scope="col">Członkowie</th> -->
                         <th scope="col">Zgoda</th>
                     </tr>
                     </thead>
@@ -70,10 +71,11 @@ require_once '../core/init.php';
                             echo "\n<tr>\t";
                             echo '<td class="small">'. $no .'</td>';
                             echo '<td class="small">'. $approval->Title .'</td>';
-                            echo '<td class="small">'. $approval->Version .'.0</td>';
-                            echo '<td class="small">'. ((($approval->IsActived) == 1) ? 'Tak' : 'Nie') .'</td>';
+                            echo '<td class="small text-center">'. $approval->Version .'.0</td>';
+                            echo '<td class="small text-center">'. ((($approval->IsActived) == 1) ? 'Tak' : 'Nie') .'</td>';
                             echo '<td class="small">'. $approval->DateStart .'</td>';
                             echo '<td class="small">'. $approval->DateEnd .'</td>';
+                            // echo '<td class="small text-center">'. $approval->NoUsers .'</td>';
                             echo '<td class="text-center small"><a href="approvusers.php?id='. $approval->AgreementGuid . escape('&page=1') .'">Zarządzaj</a></td>';
                             echo '<td class="text-center small"><a href="approvmanag.php?approval='. $approval->AgreementGuid .'">Edytuj</a></td>';
                             echo "\t</tr>";
